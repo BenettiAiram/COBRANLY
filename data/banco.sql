@@ -1,89 +1,107 @@
 -- Deleta o banco de dados 
-DROP DATABASE sistema_trocas;
+DROP DATABASE COBRANLY;
 
 -- Cria o banco de dados sistema_trocas
-CREATE DATABASE IF NOT EXISTS sistema_trocas;
+CREATE DATABASE IF NOT EXISTS COBRANLY;
 
 -- UTILIZA O BANCO CRIADO PARA CRIAÇÃO DAS TABELAS
-USE sistema_trocas;
+USE COBRANLY;
 
--- Deleta as tabelas antigas caso existam
-DROP TABLE IF EXISTS usuarios;
-DROP TABLE IF EXISTS produtos;
-DROP TABLE IF EXISTS interesses;
-
--- Tabela usuários
-CREATE TABLE usuarios(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	nome VARCHAR(100),
-    email VARCHAR(100),
-    senha VARCHAR(255),
-    telefone VARCHAR(20),
-    foto VARCHAR(255),
-    perfil ENUM('administrador', 'ofertante', 'interessado')
+-- Tabela usuários 
+CREATE TABLE usuario(
+	id_usuario INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    email_usuario VARCHAR(50) NOT NULL,
+    senha_usuario VARCHAR(100) NOT NULL,
+    cargo ENUM('administrador', 'cobrador')
 );
 
--- Tabela produtos
-CREATE TABLE produtos(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	nome VARCHAR(100),
-	descricao TEXT,
-    preco DECIMAL(10,2),
-	condicao ENUM('novo', 'usado') DEFAULT 'usado',
-    foto VARCHAR(255),
-	is_publico BOOLEAN DEFAULT TRUE,
-    status_troca BOOLEAN DEFAULT FALSE,
-    id_usuario INT,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+-- Tabela empresa 
+CREATE TABLE empresa(
+	id_empresa INT AUTO_INCREMENT PRIMARY KEY,
+	nome_empresa VARCHAR(50),
+	email_empresa VARCHAR(50) NOT NULL,
+	encarregado_empresa VARCHAR(50),
+	CNPJ_empresa VARCHAR(18) NOT NULL,
+    telefoneResidencial_empresa VARCHAR(20),
+    telefoneComercial_empresa VARCHAR(20),
+    CEP_empresa VARCHAR(10),
+	bairro_empresa VARCHAR(150),
+	cidade_empresa VARCHAR(150),
+    estado_empresa VARCHAR(150)
+
 );
 
--- Tabela interesses
-CREATE TABLE interesses(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	id_produto INT,
-    id_interessado INT,
-    data_interesse DATETIME DEFAULT CURRENT_TIMESTAMP,
-    -- REFERENCIAS DE CHAVE ESTRANGEIRAS
-    FOREIGN KEY (id_produto)     REFERENCES produtos(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_interessado) REFERENCES usuarios(id) ON DELETE CASCADE 
+-- Tabela cliente 
+CREATE TABLE cliente(
+	id_cliente INT AUTO_INCREMENT PRIMARY KEY,
+    nome_cliente VARCHAR(50),
+    CPF_cliente VARCHAR(14) NOT NULL, 
+    telefone_cliente VARCHAR(20) NOT NULL,
+    email_cliente VARCHAR(50) NOT NULL,
+    CEP_cliente VARCHAR(10),
+	bairro_cliente VARCHAR(150),
+    cidade_cliente VARCHAR(150),
+    estado_cliente VARCHAR(150),
+    banco_cliente VARCHAR(45),
+    agência_cliente VARCHAR(150),
+    contaCorrente_cliente VARCHAR(45) NOT NULL,
+
+	empresa_id_empresa INT NOT NULL,
+    
+	CONSTRAINT fk_cliente_empresa
+    FOREIGN KEY (empresa_id_empresa)
+    REFERENCES empresa (id_empresa)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
 );
 
--- senha: greg
--- INSERTS DE USUÁRIOS
--- ADM
-INSERT INTO usuarios(nome, email, senha, telefone, perfil)
-VALUES(
-	'Admin Greg', 
-    'greg@gmail.com', 
-    '$2a$10$bnVggkOhZQJP9ipjXWe01eztcGAB/T3ptXbA36MzwiAyAn6EkYaca', 
-    '2740028922', 
+-- Tabela cobrança 
+CREATE TABLE cobranca(
+	id_cobranca INT AUTO_INCREMENT PRIMARY KEY,
+    valor_divida DECIMAL(10,2),
+    status_cobranca VARCHAR(45),
+    juros_cobranca VARCHAR(45),
+    multas_cobranca VARCHAR(45),
+    data_vencimento DATE,
+    data_criacao DATE,
+    
+	empresa_id_empresa INT NOT NULL, 
+    
+    cliente_id_cliente INT NOT NULL,
+    
+	CONSTRAINT fk_cobranca_empresa
+    FOREIGN KEY (empresa_id_empresa)
+    REFERENCES empresa (id_empresa)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    
+	CONSTRAINT fk_cobranca_cliente
+    FOREIGN KEY (cliente_id_cliente)
+    REFERENCES cliente (id_cliente)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+-- Administrador
+INSERT INTO usuario (
+    email_usuario,
+    senha_usuario,
+    cargo
+)
+VALUES (
+    'admin@gmail.com',
+    '$2a$10$XJw2ibichDobFpLhgCGTWeRm21tHiv9YSX7vZoJg1FhECsPDhoxzO',
     'administrador'
 );
 
--- OFERTANTE
-INSERT INTO usuarios(nome, email, senha, telefone, perfil)
-VALUES(
-	'João Ofertante', 
-    'ofertante@gmail.com', 
-    '$2a$10$bnVggkOhZQJP9ipjXWe01eztcGAB/T3ptXbA36MzwiAyAn6EkYaca', 
-    '2740028922', 
-    'ofertante'
+-- Cobrador
+INSERT INTO usuario (
+    email_usuario,
+    senha_usuario,
+    cargo
+)
+VALUES (
+    'cobrador@gmail.com',
+    '$2a$10$hN/Ipoo9ZqWUqdk1ZoEto.gMPzdblS9MG2uFPgIjXe8yE3CbJ2bdu',
+    'cobrador'
 );
-
--- INTERESSADO
-INSERT INTO usuarios(nome, email, senha, telefone, perfil)
-VALUES(
-	'Bruce Interessado', 
-    'interessado@gmail.com', 
-    '$2a$10$bnVggkOhZQJP9ipjXWe01eztcGAB/T3ptXbA36MzwiAyAn6EkYaca', 
-    '2740028922', 
-    'interessado'
-);
-
-
-
-
-
-
-
-

@@ -1,5 +1,5 @@
 <!-- importa o header -->
-<%- include('../partials/header')  %>
+<%- include('../partials/header_log')  %>
 
 <main>
     <div class="container">
@@ -43,8 +43,9 @@
                         <div class="form-group">
                             <label for="perfil"> <i class="fa-solid fa-users"></i> Qual seu papel?</label>
                             <select name="perfil" id="perfil" class="form-control" required>
-                                <option value="ofertante"> Quero oferecer produtos </option>
-                                <option value="interessado"> Busco produtos </option>
+                                <option value=""> - Selecione - </option>
+                                <option value="Cobrador"> Cobrador </option>
+                                <option value="Gerente"> Administrador </option>
                             </select>
                         </div>
                         <!-- Caixinha de foto -->

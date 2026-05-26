@@ -1,10 +1,10 @@
 <!-- importa o header -->
-<%- include('../partials/header') %>
+<%- include('../partials/header_log') %>
 
 <!-- MAIN: A classe login-container usa o Flexbox do Body para centralizar a div interna no meio do espaço livre -->
 <main class="login-container">
     <!-- CARD DO LOGIN: Seguindo o Design System Brutalista com bordas grossas -->
-    <div class="card" style="width: 100%; max-width: 400px; padding: 2rem; border: 2px solid var(--cor-borda); box-shadow: 6px 6px 0px var(--cor-borda); background-color: var(--cor-fundo);">
+    <div class="card" style="width: 100%; max-width: 400px; padding: 2rem; border: 2px solid var(--cor-borda); box-shadow: 6px 6px 0px var(--cor-borda); background-color: var(--cor-padrao);">
         <div style="text-align: center; margin-bottom: 2rem;">
             <!-- Ícone do Font Awesome centralizado com a cor Vermelha -->
             <i class="fa-solid fa-circle-user fa-4x" style="color: var(--cor-destaque); margin-bottom: 10px;"></i>
@@ -25,7 +25,8 @@
                 </label>
                 <input type="password" id="senha_login" name="senha" class="form-control" placeholder="Sua senha secreta" required>
             </div>
-            <!-- Botão Primário Vermelho -->
+            <a href="/recuperar_senha" style="color: var(--cor-destaque); text-decoration: underline;">Esqueceu sua senha?</a> --> (mexer nas routes) 
+            <!-- Botão Entrar -->
             <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px; font-size: 16px;">
                 <i class="fa-solid fa-right-to-bracket"></i> Entrar
             </button>
@@ -36,7 +37,6 @@
                     Não tem uma conta? <span style="color: var(--cor-destaque); text-decoration: underline;">Crie aqui</span>
                 </a>
             </div>
-
         </form>
     </div>
     

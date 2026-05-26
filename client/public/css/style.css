@@ -6,12 +6,13 @@
 /* CRIAÇÃO DAS VÁRIÁVEIS PARA UTILIZAÇÃO */
 :root{
     /* Cores base do sistema */
-    --cor-fundo: #FFF;
+    --cor-padrao: #fff;
+    --cor-fundo: #f3f3f3;
     --cor-texto-principal: #000;
     --cor-texto-inverso: #FFF;
-    --cor-destaque: #FF0000;
+    --cor-destaque: #28b16c;
     --cor-borda: #000;
-    --cor-menu: #000; 
+    --cor-menu: #145733; 
 
     /* outras configurações */
     --radius-padrao: 10px;
