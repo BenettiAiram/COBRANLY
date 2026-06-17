@@ -1,5 +1,5 @@
 -- Deleta o banco de dados 
-DROP DATABASE COBRANLY;
+DROP DATABASE IF EXISTS COBRANLY;
 
 -- Cria o banco de dados sistema_trocas
 CREATE DATABASE IF NOT EXISTS COBRANLY;
@@ -89,8 +89,8 @@ INSERT INTO usuario (
     cargo
 )
 VALUES (
-    'admin@gmail.com',
-    '$2a$10$XJw2ibichDobFpLhgCGTWeRm21tHiv9YSX7vZoJg1FhECsPDhoxzO',
+    'administrador@gmail.com',
+    '$2a$10$G4McQ/tMSUi6QZgzribY0uM7O/x/ofNJTwIIdMfhmqvM6p5ATpDyS',
     'administrador'
 );
 
@@ -102,6 +102,6 @@ INSERT INTO usuario (
 )
 VALUES (
     'cobrador@gmail.com',
-    '$2a$10$hN/Ipoo9ZqWUqdk1ZoEto.gMPzdblS9MG2uFPgIjXe8yE3CbJ2bdu',
+    '$2a$10$G4McQ/tMSUi6QZgzribY0uM7O/x/ofNJTwIIdMfhmqvM6p5ATpDyS',
     'cobrador'
 );

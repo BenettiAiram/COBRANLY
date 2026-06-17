@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COBRANLY</title>
+
+    <!-- IMPORTAÇÃO AWESOME -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- IMPORTAÇÃO DO BOOTSTRAP -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+    <!-- importacao css -->
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header class="header-sistema">
+      <a href="#">
+        <img src="img/logo_completa.jpeg" alt="logo" width="100" height="100" />
+      </a>
+      <!-- Opções de menu, na direita -->
+      <nav class="nav-menu">
+
+        <!-- SE TIVER LOGADO -->
+        <% if(typeof usuario !== 'undefined' && usuario){ %>
+
+          <!-- MOSTRA NOME DO USUÁRIO -->
+          <span style="color: var(--cor-destaque); font-weight: bold; margin-right: 15px;">
+            <i class="fa-solid fa-user"></i> Olá, <%= usuario.nome %>
+          </span>
+
+          <!-- Se for adm -->
+          <% if(usuario.perfil === 'administrador'){ %>
+
+            <div class="dropdown d-inline-block">
+              <button class="dropdown-btn dropdown-toggle btn" type="button"
+              data-bs-toggle="dropdown" aria-expanded="false"
+              style="background: transparent; border: none;">
+                <i class="fa-solid fa-user-shield"></i> Gerenciamento do Admin
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="/usuarios" class="dropdown-item">
+                    <i class="fa-solid fa-users"></i> Visualizar usuarios
+                  </a>
+                </li>
+                <li>
+                  <a href="/usuarios/cadastrar" class="dropdown-item">
+                    <i class="fa-solid fa-user-plus"></i> Cadastrar novo
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+          <% } %>
+
+          <!-- Se for cobrador -->
+          <% if(usuario.perfil === 'cobrador'){ %>
+
+            <div class="dropdown d-inline-block">
+              <button class="dropdown-btn dropdown-toggle btn" type="button"
+              data-bs-toggle="dropdown" aria-expanded="false"
+              style="background: transparent; border: none;">
+                <i class="fa-solid fa-box"></i> Meus Devedores
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="/devedores/cadastrar" class="dropdown-item">
+                    <i class="fa-solid fa-shop"></i> Meu painel
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <a href="/devedores/listar" class="btn" style="border:none; background: transparent; padding: 10px">
+              <i class="fa-solid fa-shop"></i> Vitrine Publica
+            </a>
+
+          <% } %>
+
+          <!-- BOTAO DE SAIR -->
+          <a href="/usuarios/logout" class="btn" style="margin-left: 20px;">
+            <i class="fa-solid fa-right-from-bracket"></i> Sair
+          </a>
+
+        <!-- SE NÃO TIVER LOGADO -->
+        <% } else { %>
+
+          <a href="/login" class="btn btn-primary"
+          style="background-color: var(--cor-destaque); border: 2px solid var(--cor-fundo);">
+            <i class="fa-solid fa-right-from-bracket"></i> Fazer login
+          </a>
+
+          <a href="/cadastro" class="btn btn-secondary">
+            <i class="fa-solid fa-user-plus"></i> Criar conta
+          </a>
+
+        <% } %>
+      </nav>
+    </header>
+  </body>
+</html>

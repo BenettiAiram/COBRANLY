@@ -1,6 +1,7 @@
 <!-- importa o header -->
-<%- include('../partials/header')  %>
+<%- include('../partials/header') %>
 
+<!-- MAIN : com o conteúdo da página-->
 <main>
     <div class="container">
         <!-- Estilo do card geral -->
@@ -10,7 +11,7 @@
             <!-- Texto inicial -->
             <h2 style="color: var(--cor-destaque); text-align: center; margin-bottom: 5px;"> 
                 <i class="fa-solid fa-user-plus"></i>
-                CRIAR NOVA CONTA 
+                CRIAR NOVO USUÁRIO
             </h2>
             <!-- Formulário de cadastro -->
             <form action="/usuarios/cadastrar" method="post" enctype="multipart/form-data">
@@ -43,9 +44,8 @@
                         <div class="form-group">
                             <label for="perfil"> <i class="fa-solid fa-users"></i> Qual seu papel?</label>
                             <select name="perfil" id="perfil" class="form-control" required>
-                                <option value=""> - Selecione - </option>
-                                <option value="Cobrador"> Cobrador </option>
-                                <option value="Gerente"> Administrador </option>
+                                <option value="administrador"> Administrador </option>
+                                <option value="cobrador"> Quero cobrar </option>
                             </select>
                         </div>
                         <!-- Caixinha de foto -->
@@ -89,19 +89,10 @@
                  <button type="submit" class="btn btn-secondary" style="width: 100%; margin-top: 15px;">
                     <i class="fa-solid fa-check"></i> Cadastrar
                  </button>
-                 <!-- Opção para ir para página de login -->
-                  <div style="text-align: center; margin-top: 20px;">
-                        <a href="/login" style="color: var(--cor-texto-principal); font-weight: bold; text-decoration: none;">
-                            Já tem conta? 
-                            <span style="color: var(--cor-destaque); text-decoration: underline;"> 
-                                Faça Login
-                            </span>
-                        </a>
-                  </div>
             </form>
         </div>
     </div>
 </main>
 
 <!-- importa o footer -->
-<%- include('../partials/footer')  %>
+<%- include('../partials/footer') %>

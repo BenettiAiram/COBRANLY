@@ -8,8 +8,8 @@ const usuarioController = require("../controllers/usuarioController.js")
 // Importar o multer
 const upload = require("../config/multer.js")
 
-// Importar o middleware de autenticacao,
-const { verificarAutenticacao, somenteAdmin } = require("../middlewares/authMiddleware.js");
+// Importar o middleware de autenticação
+const { verificarAutenticacao, somenteAdmin } = require("../middlewares/authMiddleware.js")
 
 // Declaração das rotas do usuário
 // ROTAS PÚBLICAS
@@ -20,23 +20,30 @@ router.post("/login", usuarioController.login)
 router.get("/logout", usuarioController.logout)
 
 // Rota de cadastro de usuário
-// o multer salva a img primeiro, atrvés do upload.single, depois chama o contreller
-router.post("/cadastrar", upload.single('foto'), usuarioController.cadastar)
+// O multer, salva a imagem primeiro, através do upload.single, depois chama o controller
+router.post('/cadastrar', upload.single('foto'), usuarioController.cadastrar )
 
 // ROTAS PRIVADAS
-// Daqui p/ baixo, só executa se tiver acesso para tal
-router.use(verificarAutenticacao);
-router.use(somenteAdmin);
+// Daqui pra baixo, só executa se tiver acesso para tal
+router.use(verificarAutenticacao)
+router.use(somenteAdmin)
 
+// CRUD
+// READ - LISTAR USUÁRIOS
 // Obtém a lista de usuários
-router.get("/", (req, res) => {
-  res.json({ mensagem: "Peguei a lista de usuários" });
-});
+router.get("/", usuarioController.listar);
 
+// CREATE - CRIAR USUÁRIOS
 //Retornar a página de cadastro
-router.get("/cadastro", (req, res) => {
-  res.json({ mensagem: "Estou na página de cadastro" });
-});
+router.get("/cadastro", usuarioController.renderizarCadastro);
 
+// DELETE - DELETAR UM USUÁRIO
+router.post("/deletar/:id", usuarioController.deletar)
+
+// UPDATE - LISTA UM USUÁRIO
+router.get("/editar/:id", usuarioController.editar)
+
+// UPDATE - ATUALIZA AS INFORMAÇOES DE UM USUÁRIO
+router.post("/atualizar/:id", upload.single('foto'), usuarioController.atualizarUsuario)
 
 module.exports = router

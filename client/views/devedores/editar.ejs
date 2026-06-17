@@ -1,6 +1,7 @@
 <!-- importa o header -->
-<%- include('../partials/header')  %>
+<%- include('../partials/header') %>
 
+<!-- MAIN : com o conteúdo da página-->
 <main>
     <div class="container">
         <!-- Estilo do card geral -->
@@ -9,11 +10,11 @@
         background-color: var(--cor-fundo);">
             <!-- Texto inicial -->
             <h2 style="color: var(--cor-destaque); text-align: center; margin-bottom: 5px;"> 
-                <i class="fa-solid fa-user-plus"></i>
-                CRIAR NOVA CONTA 
+                <i class="fa-solid fa-user-pen"></i>
+                EDITAR PERFIL
             </h2>
-            <!-- Formulário de cadastro -->
-            <form action="/usuarios/cadastrar" method="post" enctype="multipart/form-data">
+            <!-- Formulário de ATUALIZAÇÃO -->
+            <form action="/usuarios/atualizar/<%= usuarioEditado.id %>" method="post" enctype="multipart/form-data">
 
                 <div class="row">
                     <div class="col">
@@ -26,7 +27,7 @@
                             <label for="nome">
                                 <i class="fa-solid fa-id-card"></i> Nome Completo:      
                             </label>
-                            <input type="text" id="nome" name="nome" class="form-control" required>
+                            <input type="text" id="nome" name="nome" class="form-control" value="<%= usuarioEditado.nome %>" required>
                          </div>
                          <!-- Legenda divisão 2 -->
                         <fieldset class="mt-3">
@@ -36,22 +37,28 @@
                         <!-- Caixinha de email -->
                         <div class="form-group">
                             <label for="email"> <i class="fa-solid fa-envelope"></i> Email:</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
+                            <input type="email" id="email" name="email" class="form-control" value="<%= usuarioEditado.email %>" required>
                         </div>
 
                         <!-- Caixinha de perfil -->
                         <div class="form-group">
                             <label for="perfil"> <i class="fa-solid fa-users"></i> Qual seu papel?</label>
                             <select name="perfil" id="perfil" class="form-control" required>
-                                <option value=""> - Selecione - </option>
-                                <option value="Cobrador"> Cobrador </option>
-                                <option value="Gerente"> Administrador </option>
+                                <option value="ofertante" <%= usuarioEditado.perfil === "ofertante" ? 'selected': '' %>> 
+                                    Quero oferecer produtos 
+                                </option>
+                                <option value="interessado" <%= usuarioEditado.perfil === "interessado" ? 'selected': '' %>>  
+                                    Busco produtos 
+                                </option>
+                                <option value="administrador" <%= usuarioEditado.perfil === "administrador" ? 'selected': '' %>> 
+                                    Administrador 
+                                </option>
                             </select>
                         </div>
                         <!-- Caixinha de foto -->
                         <div class="form-group">
                             <label for="foto"><i class="fa-solid fa-camera"></i> Foto do produto</label>
-                            <input type="file" name="foto" id="foto" class="form-control" accept="image/*" required>
+                            <input type="file" name="foto" id="foto" class="form-control" accept="image/*" >
                         </div>
                     </div>
                     <!-- SEGUNDA COLUNA -->
@@ -66,7 +73,7 @@
                             <label for="telefone">
                                 <i class="fa-solid fa-phone"></i> Telefone / Whatsapp:      
                             </label>
-                            <input type="text" id="telefone" name="telefone" class="form-control" required>
+                            <input type="text" id="telefone" name="telefone" class="form-control" value="<%= usuarioEditado.telefone %>"required>
                          </div>
                          <!-- Legenda divisão 2 -->
                         <fieldset class="mt-3">
@@ -75,33 +82,30 @@
 
                         <!-- Caixinha de senha -->
                          <div class="form-group"> 
-                            <label for="senha"> <i class="fa-solid fa-lock"></i> Senha:</label>
-                            <input type="password" name="senha" id="senha" class="form-control" required>
+                            <label for="senha"> <i class="fa-solid fa-lock"></i> Senha (deixe em branco se não quiser mudar):</label>
+                            <input type="password" name="senha" id="senha" class="form-control" >
                          </div>
 
                          <!-- PREVIEW DA IMAGEM -->
-                          <div id="preview-box" class="preview-container max-width:100%" style="height: 230px;">
-                            <img src="..." alt="Foto do usuário" id="preview-img" style="height: 230px; width: auto;">
+                          <div id="preview-box" class="preview-container max-width:100%">
+                            <!-- Verifica se o usuário já possui foto cadastrada -->
+                            <% if (usuarioEditado.foto) {%>
+                              <img src="<%= usuarioEditado.foto %>" alt="Foto do usuário" id="preview-img" style="height: 230px; width: auto;">
+                            <% } else { %>
+                              <img src="..." alt="Foto do usuário" id="preview-img" style="height: 230px; width: auto;">
+                            <% } %>
+
                           </div>
                     </div>
                 </div>
                 <!-- Botão de envio do formulário -->
                  <button type="submit" class="btn btn-secondary" style="width: 100%; margin-top: 15px;">
-                    <i class="fa-solid fa-check"></i> Cadastrar
+                    <i class="fa-solid fa-floppy-disk"></i> SALVAR ALTERAÇÕES
                  </button>
-                 <!-- Opção para ir para página de login -->
-                  <div style="text-align: center; margin-top: 20px;">
-                        <a href="/login" style="color: var(--cor-texto-principal); font-weight: bold; text-decoration: none;">
-                            Já tem conta? 
-                            <span style="color: var(--cor-destaque); text-decoration: underline;"> 
-                                Faça Login
-                            </span>
-                        </a>
-                  </div>
             </form>
         </div>
     </div>
 </main>
 
 <!-- importa o footer -->
-<%- include('../partials/footer')  %>
+<%- include('../partials/footer') %>

@@ -1,64 +1,75 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 
-// Verifica se existe algum token
-function verificarAutanticacao(req, res, next) {
+// Verifica se existe algum token 
+function verificarAutenticacao(req, res, next) {
     // Verifica se tem algum token salvo
-    const token = req.cookies?.token;
+    const token = req.cookies?.token
 
-    // Se não tiver, já redireciona o usuário p/ tela de login
-    if (!token) {
-        return res.redirect('/login');
+    // Se não tiver, já redireciona o usuário para a tela de login
+    if(!token){
+        return res.redirect('/login')
     }
 
-    try {
-        // Verifica se  token é válido ou não
-        const dados = jwt.verify(token, process.env.JWT_SECRET);
+    try{
+        // Verifica se o token é válido ou não
+        const dados = jwt.verify(token, process.env.JWT_SECRET)
 
-        // Salva o usuário no backend, p/ todos terem acesso
-        req.usuario = dados;
-        // Variável global p/ EJS ter aceso às informações do usuário logado
-        res.locals.usuario = dados;
-        // Deixa o usuário prossegruir
-        next();
+        // Salva o usuário no backend, para todos terem acesso
+        req.usuario = dados
+        // Variável global para o EJS ter acesso as informações do usuário logado
+        res.locals.usuario = dados
+        // Deixa o usuário prosseguir
+        next()
     }
-    catch (error) {
-        res.clearCookie('token'); // apaga o token inválido
-        return res.redirect('/login'); // vai p/ login
-
+    catch(erro){
+        res.clearCookie('token') // apaga o token inválido
+        return res.redirect('/login') // vai pra tela de login
     }
 }
 
-//Filtros po perfil
-// Apenas adms
+
+// FILTROS POR PERFIL
+// Apenas adm
 function somenteAdmin(req, res, next) {
-    if (req.usuario.role !== 'administrador') {
-        return res.status(403).render('erro'),
+    if(req.usuario.perfil !== "administrador"){
+        return res.status(403).render('erro', 
             { mensagem: "Acesso negado: Somente administradores" }
+        )
     }
-    next();
+    next()
 }
-// Apenas ofertantes
+// Apenas ofertante
 function somenteOfertante(req, res, next) {
-    if (req.usuario.perfil !== 'administrador' && req.usuario.perfil !== 'ofertante') {
-        return res.status(403).render('erro'),
-            { mensagem: "Acesso negado: Somente administradores e ofertntes" }
+    if(req.usuario.perfil !== "administrador" && req.usuario.perfil !== "ofertante"){
+        return res.status(403).render('erro', 
+            { mensagem: "Acesso negado: Área para administradores e ofertantes" }
+        )    
     }
-    next();
+    next()
 }
 // Apenas interessados
-function somenteInteressado(req, res, next) {
-    if (req.usuario.perfil !== 'interessado') {
-        return res.status(403).render('erro'),
-            { mensagem: "Acesso negado: Somente interessados" }
+function somenteInteressado(req, res, next){
+    if(req.usuario.perfil !== "interessado"){
+        return res.status(403).render('erro', 
+            { mensagem: "Acesso negado: Área exclusiva para interessados" }
+        )    
     }
-    next();
+    next()
 }
-// Área p/ interessados e ofertantes
-function usuariosComuns(req, res, next) {
-    if (req.usuario.perfil !== 'interessado' && req.usuario.perfil !== 'ofertante') {
-        return res.status(403).render('erro'),
+// Área para interessados e ofertantes
+function usuariosComuns(req,res,next){
+      if(req.usuario.perfil !== "interessado" && req.usuario.perfil !== "ofertante" ){
+        return res.status(403).render('erro', 
             { mensagem: "Acesso negado" }
+        )    
     }
-    next();
+    next()  
+} 
+
+module.exports = { 
+    verificarAutenticacao, 
+    somenteAdmin, 
+    somenteInteressado, 
+    somenteOfertante, 
+    usuariosComuns
 }
-module.exports = { verificarAutanticacao, somenteAdmin, somenteInteressado, somenteOfertante, usuariosComuns}
