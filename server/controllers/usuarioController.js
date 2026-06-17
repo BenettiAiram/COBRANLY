@@ -35,8 +35,8 @@ module.exports = {
             res.cookie('token', token, { httpOnly: true })
 
             // Redirecionamento de acordo com o perfil
-            if(usuario.perfil === "administrador") return res.redirect("/usuarios")
-            if (usuario.perfil === "cobrador") return res.redirect("/devedores")
+            if(usuario.perfil === "administrador") return res.redirect("/usuarios/listar")
+            if(usuario.perfil === "cobrador") return res.redirect("/devedores/listar")
         }
         catch(erro){
             res.status(500).render('erro', { mensagem: "Erro interno no servidor"})
@@ -83,7 +83,7 @@ module.exports = {
                 // Lê o token, e se o usuário atual for um adm, redireciona para tela geral dos adm
                 const decodificado = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
                 if (decodificado.perfil === 'administrador'){
-                    redirecionadoPara = '/usuarios'
+                    redirecionadoPara = '/usuarios/listar'
                 }
             }
             catch (erro){
