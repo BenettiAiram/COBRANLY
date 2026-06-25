@@ -64,11 +64,8 @@ CREATE TABLE cobranca(
     multas_cobranca VARCHAR(45),
     data_vencimento DATE,
     data_criacao DATE,
-    
 	empresa_id_empresa INT NOT NULL, 
-    
     cliente_id_cliente INT NOT NULL,
-    
 	CONSTRAINT fk_cobranca_empresa
     FOREIGN KEY (empresa_id_empresa)
     REFERENCES empresa (id_empresa)
