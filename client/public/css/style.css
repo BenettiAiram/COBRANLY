@@ -1,3 +1,45 @@
+/* TABELAS */
+.tabela-dados{
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background-color: var(--cor-padrao);
+    border: 2px solid var(--cor-borda);
+}
+
+.tabela-dados th,
+.tabela-dados td{
+    padding: 12px;
+    border: 2px solid var(--cor-borda);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.tabela-dados th{
+    background-color: var(--cor-menu);
+    color: var(--cor-texto-inverso);
+    text-transform: uppercase;
+}
+
+.tabela-dados tbody tr:nth-child(even){
+    background-color: var(--cor-fundo);
+}
+
+.acoes-tabela{
+    text-align: center;
+    white-space: nowrap;
+}
+
+.acoes-tabela form{
+    display: inline-block;
+    margin: 0;
+}
+
+.tabela-vazia{
+    text-align: center;
+    font-weight: bold;
+}
+
 /* CRIANDO UM DESING SYSTEM PARA O SISTEMA */
 /* Cores padrão do sistema são: Vermelho, branco e preto */
 /* IMPORTAÇÃO DAS FONTES DO PROJETO */
