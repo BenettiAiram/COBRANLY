@@ -4,7 +4,18 @@ const db = require("../config/db.js")
 module.exports = {
     buscarPorEmail: async (email) => {
         // Query
-        const query = 'select * from usuarios where email = ?'
+        const query = `
+            SELECT
+                id_usuario AS id,
+                email_usuario AS email,
+                senha_usuario AS senha,
+                cargo AS perfil,
+                SUBSTRING_INDEX(email_usuario, '@', 1) AS nome,
+                NULL AS telefone,
+                NULL AS foto
+            FROM usuarios
+            WHERE email_usuario = ?
+        `
 
         // Guarda o resultado da consulta na variavel
         const [linhas] = await db.execute(query,[email])
@@ -16,11 +27,11 @@ module.exports = {
     // CREATE
     criarUsuario: async (nome, email, senha, telefone, foto, perfil) =>{
         // Query pra fazer a consulta no banco
-        const query = `INSERT INTO usuarios (nome, email, senha, telefone, foto, perfil)
-        VALUES (?,?,?,?,?,?)`
+        const query = `INSERT INTO usuarios (email_usuario, senha_usuario, cargo)
+        VALUES (?,?,?)`
 
         // Guarda o resultado da consulta na variavel
-        const [resultado] = await db.execute(query, [nome , email, senha, telefone, foto, perfil])
+        const [resultado] = await db.execute(query, [email, senha, perfil])
         // Retorna pro controller o resultado, nesse caso o usuario encontrado
         return resultado.insertId
 
@@ -29,7 +40,37 @@ module.exports = {
     // READ
     listarUsuarios: async () => {
         // Query pra fazer a consulta no banco
-        const query = 'SELECT * FROM usuarios'
+        const query = `
+            SELECT
+                id_usuario AS id,
+                SUBSTRING_INDEX(email_usuario, '@', 1) AS nome,
+                email_usuario AS email,
+                senha_usuario AS senha,
+                cargo AS perfil,
+                NULL AS telefone,
+                NULL AS foto
+            FROM usuarios
+        `
+        // Guarda o resultado da consulta na variavel
+        const [linhas] = await db.execute(query)
+        // Retorna pro controller o resultado, nesse caso o usuarios
+        return linhas
+    },
+
+    listarDevedores: async () => {
+        // Query pra fazer a consulta no banco
+        const query = `
+            SELECT
+                id_usuario AS id,
+                SUBSTRING_INDEX(email_usuario, '@', 1) AS nome,
+                email_usuario AS email,
+                senha_usuario AS senha,
+                cargo AS perfil,
+                NULL AS telefone,
+                NULL AS foto
+            FROM usuarios
+            WHERE cargo = "devedor"
+        `
         // Guarda o resultado da consulta na variavel
         const [linhas] = await db.execute(query)
         // Retorna pro controller o resultado, nesse caso o usuarios
@@ -39,7 +80,7 @@ module.exports = {
     //DELETE
     deletarUsuario: async (id) => {
         // Query pra fazer a consulta no banco
-        const query = 'DELETE FROM usuarios WHERE id = ?'
+        const query = 'DELETE FROM usuarios WHERE id_usuario = ?'
         // Guarda o resultado da consulta na variavel
         const [resultado] = await db.execute(query, [id])
         // Retorna pro controller o resultado, nesse caso o usuarios
@@ -50,7 +91,18 @@ module.exports = {
     // Busca por id
     buscarPorId: async(id) => {
         // Query pra fazer a consulta no banco
-        const query = 'SELECT * FROM usuarios WHERE id = ?';
+        const query = `
+            SELECT
+                id_usuario AS id,
+                SUBSTRING_INDEX(email_usuario, '@', 1) AS nome,
+                email_usuario AS email,
+                senha_usuario AS senha,
+                cargo AS perfil,
+                NULL AS telefone,
+                NULL AS foto
+            FROM usuarios
+            WHERE id_usuario = ?
+        `;
         // Guarda o resultado da consulta na variavel
         const [linhas] = await db.execute(query, [id]);
         // Retorna pro controller o resultado, nessa caso o usuario encontrado
@@ -62,12 +114,12 @@ module.exports = {
         // Lógica p/ atualizar com e sem foto anexada
         if (foto) {
             // Query pra fazer a consulta no banco
-            const query = 'UPDATE usuarios SET nome = ?, email = ?, senha = ?, telefone = ?, foto = ?, perfil = ? WHERE id = ?';
-            const [resultado] = await db.execute(query, [nome, email, senhaHash, telefone, foto, perfil, id]);
+            const query = 'UPDATE usuarios SET email_usuario = ?, senha_usuario = ?, cargo = ? WHERE id_usuario = ?';
+            const [resultado] = await db.execute(query, [email, senhaHash, perfil, id]);
             return resultado.affectedRows;
         } else {
-            const query = `UPDATE usuarios SET nome = ?, email = ?, senha = ?, telefone = ?, perfil = ? WHERE id = ?`;
-            const [resultado] = await db.execute(query, [nome, email, senhaHash, telefone, perfil, id]);
+            const query = `UPDATE usuarios SET email_usuario = ?, senha_usuario = ?, cargo = ? WHERE id_usuario = ?`;
+            const [resultado] = await db.execute(query, [email, senhaHash, perfil, id]);
             return resultado.affectedRows;
         }
     }

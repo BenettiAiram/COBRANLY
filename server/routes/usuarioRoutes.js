@@ -18,7 +18,8 @@ router.post("/login", usuarioController.login)
 // Rota de saida
 router.get("/logout", usuarioController.logout)
 // Rota de recuperação de senha
-router.get("/usuarios/recuperar_senha", usuarioController.RecuperarSenha)
+router.get("/recuperar_senha", usuarioController.RecuperarSenha)
+router.post("/recuperar_senha", usuarioController.enviarRecuperacaoSenha)
 
 // Rota de cadastro de usuário
 // O multer, salva a imagem primeiro, através do upload.single, depois chama o controller
@@ -27,12 +28,15 @@ router.post('/cadastrar', upload.single('foto'), usuarioController.cadastrar )
 // ROTAS PRIVADAS
 // Daqui pra baixo, só executa se tiver acesso para tal
 router.use(verificarAutenticacao)
+
+router.get("/listarDevedores", usuarioController.listarDevedores);
+
 router.use(somenteAdmin)
 
 // CRUD
 // READ - LISTAR USUÁRIOS
 // Obtém a lista de usuários
-router.get("/usuarios/listar", usuarioController.listar);
+router.get("/listar", usuarioController.listar);
 
 // CREATE - CRIAR USUÁRIOS
 //Retornar a página de cadastro

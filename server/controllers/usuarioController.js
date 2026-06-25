@@ -29,9 +29,12 @@ module.exports = {
             res.cookie('token', token, { httpOnly: true })
             // Redirecionamento de acordo com o perfil
             if(usuario.perfil === "administrador") return res.redirect("/usuarios/listar")
-            if(usuario.perfil === "cobrador") return res.redirect("/devedores/listar")
+            if(usuario.perfil === "cobrador") return res.redirect("/usuarios/listarDevedores")
+            if(usuario.perfil === "devedor") return res.redirect("/usuarios/listarDevedores")
+            return res.redirect("/login")
         }
         catch(erro){
+            console.error(erro)
             res.status(500).render('erro', { mensagem: "Erro interno no servidor"})
         }
     },
@@ -41,6 +44,7 @@ module.exports = {
         // Volta pra tela de login
         res.redirect("/login")
     },
+    
     // CRUD
     // CRIAR USUÁRIOS
     renderizarCadastro: (req,res) => {
@@ -89,13 +93,27 @@ module.exports = {
             // Se deu certo, mostra a página de usuários
             const usuarios = await usuarioModel.listarUsuarios()
             // Renderiza a tela de usuários, passando o objeto com a lista completa
-            res.render('usuarios/listar2', { usuarios })
+            res.render('usuarios/listar', { usuarios })
         }
         catch(erro){
             // se deu erro, mostra a tela de erro padrão pra pessoa
             res.status(500).render('erro', {mensagem: "Erro ao listar usuários"})           
         }
     },
+
+    listarDevedores: async(req,res) => {
+        try{
+            // Se deu certo, mostra a página de usuários
+            const usuarios = await usuarioModel.listarDevedores()
+            // Renderiza a tela de usuários, passando o objeto com a lista completa
+            res.render('usuarios/listarDevedores', { usuarios })
+        }
+        catch(erro){
+            // se deu erro, mostra a tela de erro padrão pra pessoa
+            res.status(500).render('erro', {mensagem: "Erro ao listar devedores"})           
+        }
+    },
+
     // DELETE - DELETAR UM USUÁRIO COM BASE NO ID
     deletar: async(req,res) => {
         try{
@@ -104,14 +122,14 @@ module.exports = {
             // Chama a função no model, passando o id coletado
             await usuarioModel.deletarUsuario(idVindoDaUrl)
             // Redirecionar o usuário
-            res.redirect("/usuarios")
+            res.redirect("/usuarios/listar")
         }
         catch(erro){
         // se deu erro, mostra a tela de erro padrão pra pessoa
         res.status(500).render('erro', {mensagem: "Erro ao deletar usuário"})
         }
-    }
-    , 
+    },
+
     // UPDATE - ATUALIZAR UM USUÁRIO COM BASE NO ID
     // RENDERIZA A PÁGINA DE CADASTRO
     editar: async (req,res) => {
@@ -150,7 +168,7 @@ module.exports = {
             }
             // Chamar o model, e atualizar o usuário
             await usuarioModel.atualizarUsuario(idVindoDaUrl, nome, email, senhaHash, telefone, fotoDaPessoa, perfil)
-            res.redirect("/usuarios")
+            res.redirect("/usuarios/listar")
         }
         catch(erro){
            res.status(500).render('erro', {mensagem: "Erro ao editar usuário" })     
@@ -159,10 +177,21 @@ module.exports = {
     // RENDERIZA A PÁGINA DE RECUPERAÇÃO DE SENHA
     RecuperarSenha: async (req,res) => {
         try{
-            res.redirect('/usuarios/recuperar_senha')
+            res.render('auth/recuperar_senha')
         }
         catch(erro){
             res.status(500).render('erro', {mensagem: "Erro ao abrir tela de recuperação de senha" })     
+        }
+    },
+    enviarRecuperacaoSenha: async (req,res) => {
+        try{
+            res.render('auth/recuperar_senha', {
+                success: "Se o e-mail estiver cadastrado, enviaremos as instrucoes de recuperacao.",
+                formData: req.body
+            })
+        }
+        catch(erro){
+            res.status(500).render('erro', {mensagem: "Erro ao solicitar recuperacao de senha" })
         }
     }
 }

@@ -8,11 +8,11 @@ CREATE DATABASE IF NOT EXISTS COBRANLY;
 USE COBRANLY;
 
 -- Tabela usuários 
-CREATE TABLE usuario(
+CREATE TABLE usuarios(
 	id_usuario INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     email_usuario VARCHAR(50) NOT NULL,
     senha_usuario VARCHAR(100) NOT NULL,
-    cargo ENUM('administrador', 'cobrador')
+    cargo ENUM('administrador', 'cobrador', 'devedor')
 );
 
 -- Tabela empresa 
@@ -80,7 +80,7 @@ CREATE TABLE cobranca(
 );
 
 -- Administrador
-INSERT INTO usuario (
+INSERT INTO usuarios (
     email_usuario,
     senha_usuario,
     cargo
@@ -92,7 +92,7 @@ VALUES (
 );
 
 -- Cobrador
-INSERT INTO usuario (
+INSERT INTO usuarios (
     email_usuario,
     senha_usuario,
     cargo
@@ -101,4 +101,16 @@ VALUES (
     'cobrador@gmail.com',
     '$2a$10$G4McQ/tMSUi6QZgzribY0uM7O/x/ofNJTwIIdMfhmqvM6p5ATpDyS',
     'cobrador'
+);
+
+-- Devedor
+INSERT INTO usuarios (
+    email_usuario,
+    senha_usuario,
+    cargo
+)
+VALUES (
+    'devedor@gmail.com',
+    '$2a$10$G4McQ/tMSUi6QZgzribY0uM7O/x/ofNJTwIIdMfhmqvM6p5ATpDyS',
+    'devedor'
 );
