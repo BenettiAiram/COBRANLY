@@ -15,9 +15,10 @@ const { verificarAutenticacao, somenteAdmin } = require("../middlewares/authMidd
 // ROTAS PÚBLICAS
 // Envia os dados de login
 router.post("/login", usuarioController.login)
-
 // Rota de saida
 router.get("/logout", usuarioController.logout)
+// Rota de recuperação de senha
+router.get("/usuarios/recuperar_senha", usuarioController.RecuperarSenha)
 
 // Rota de cadastro de usuário
 // O multer, salva a imagem primeiro, através do upload.single, depois chama o controller
@@ -31,7 +32,7 @@ router.use(somenteAdmin)
 // CRUD
 // READ - LISTAR USUÁRIOS
 // Obtém a lista de usuários
-router.get("/", usuarioController.listar);
+router.get("/usuarios/listar", usuarioController.listar);
 
 // CREATE - CRIAR USUÁRIOS
 //Retornar a página de cadastro
