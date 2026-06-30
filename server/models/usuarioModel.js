@@ -1,126 +1,98 @@
-// importa a configuracao do banco
 const db = require("../config/db.js")
+
+const camposUsuario = `
+    id_usuario AS id,
+    COALESCE(nome_usuario, SUBSTRING_INDEX(email_usuario, '@', 1)) AS nome,
+    email_usuario AS email,
+    senha_usuario AS senha,
+    cargo AS perfil,
+    telefone_usuario AS telefone,
+    foto_usuario AS foto
+`
 
 module.exports = {
     buscarPorEmail: async (email) => {
-        // Query
         const query = `
-            SELECT
-                id_usuario AS id,
-                email_usuario AS email,
-                senha_usuario AS senha,
-                cargo AS perfil,
-                SUBSTRING_INDEX(email_usuario, '@', 1) AS nome,
-                NULL AS telefone,
-                NULL AS foto
+            SELECT ${camposUsuario}
             FROM usuarios
             WHERE email_usuario = ?
         `
 
-        // Guarda o resultado da consulta na variavel
-        const [linhas] = await db.execute(query,[email])
-        // Retorna pro controller o resultado, nessa caso o usuario encontrado
+        const [linhas] = await db.execute(query, [email])
         return linhas[0]
-    }
-    ,
-    // CRUD
-    // CREATE
-    criarUsuario: async (nome, email, senha, telefone, foto, perfil) =>{
-        // Query pra fazer a consulta no banco
-        const query = `INSERT INTO usuarios (email_usuario, senha_usuario, cargo)
-        VALUES (?,?,?)`
-
-        // Guarda o resultado da consulta na variavel
-        const [resultado] = await db.execute(query, [email, senha, perfil])
-        // Retorna pro controller o resultado, nesse caso o usuario encontrado
-        return resultado.insertId
-
     },
 
-    // READ
-    listarUsuarios: async () => {
-        // Query pra fazer a consulta no banco
+    criarUsuario: async (nome, email, senha, telefone, foto, perfil) => {
         const query = `
-            SELECT
-                id_usuario AS id,
-                SUBSTRING_INDEX(email_usuario, '@', 1) AS nome,
-                email_usuario AS email,
-                senha_usuario AS senha,
-                cargo AS perfil,
-                NULL AS telefone,
-                NULL AS foto
-            FROM usuarios
+            INSERT INTO usuarios (
+                nome_usuario,
+                email_usuario,
+                senha_usuario,
+                telefone_usuario,
+                foto_usuario,
+                cargo
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
         `
-        // Guarda o resultado da consulta na variavel
+
+        const [resultado] = await db.execute(query, [nome, email, senha, telefone, foto, perfil])
+        return resultado.insertId
+    },
+
+    listarUsuarios: async () => {
+        const query = `
+            SELECT ${camposUsuario}
+            FROM usuarios
+            ORDER BY id_usuario
+        `
+
         const [linhas] = await db.execute(query)
-        // Retorna pro controller o resultado, nesse caso o usuarios
         return linhas
     },
 
     listarDevedores: async () => {
-        // Query pra fazer a consulta no banco
         const query = `
-            SELECT
-                id_usuario AS id,
-                SUBSTRING_INDEX(email_usuario, '@', 1) AS nome,
-                email_usuario AS email,
-                senha_usuario AS senha,
-                cargo AS perfil,
-                NULL AS telefone,
-                NULL AS foto
+            SELECT ${camposUsuario}
             FROM usuarios
-            WHERE cargo = "devedor"
+            WHERE cargo = 'devedor'
+            ORDER BY id_usuario
         `
-        // Guarda o resultado da consulta na variavel
+
         const [linhas] = await db.execute(query)
-        // Retorna pro controller o resultado, nesse caso o usuarios
         return linhas
     },
 
-    //DELETE
     deletarUsuario: async (id) => {
-        // Query pra fazer a consulta no banco
-        const query = 'DELETE FROM usuarios WHERE id_usuario = ?'
-        // Guarda o resultado da consulta na variavel
+        const query = "DELETE FROM usuarios WHERE id_usuario = ?"
         const [resultado] = await db.execute(query, [id])
-        // Retorna pro controller o resultado, nesse caso o usuarios
         return resultado.affectedRows
     },
 
-    // UPDATE
-    // Busca por id
-    buscarPorId: async(id) => {
-        // Query pra fazer a consulta no banco
+    buscarPorId: async (id) => {
         const query = `
-            SELECT
-                id_usuario AS id,
-                SUBSTRING_INDEX(email_usuario, '@', 1) AS nome,
-                email_usuario AS email,
-                senha_usuario AS senha,
-                cargo AS perfil,
-                NULL AS telefone,
-                NULL AS foto
+            SELECT ${camposUsuario}
             FROM usuarios
             WHERE id_usuario = ?
-        `;
-        // Guarda o resultado da consulta na variavel
-        const [linhas] = await db.execute(query, [id]);
-        // Retorna pro controller o resultado, nessa caso o usuario encontrado
-        return linhas[0];
+        `
+
+        const [linhas] = await db.execute(query, [id])
+        return linhas[0]
     },
-                                                                                                                                                                      
-    // Atualiza o usuario
-    atualizarUsuario: async (id, nome, email, senhaHash , telefone, foto, perfil) => {
-        // Lógica p/ atualizar com e sem foto anexada
-        if (foto) {
-            // Query pra fazer a consulta no banco
-            const query = 'UPDATE usuarios SET email_usuario = ?, senha_usuario = ?, cargo = ? WHERE id_usuario = ?';
-            const [resultado] = await db.execute(query, [email, senhaHash, perfil, id]);
-            return resultado.affectedRows;
-        } else {
-            const query = `UPDATE usuarios SET email_usuario = ?, senha_usuario = ?, cargo = ? WHERE id_usuario = ?`;
-            const [resultado] = await db.execute(query, [email, senhaHash, perfil, id]);
-            return resultado.affectedRows;
-        }
+
+    atualizarUsuario: async (id, nome, email, senhaHash, telefone, foto, perfil) => {
+        const query = `
+            UPDATE usuarios
+            SET
+                nome_usuario = ?,
+                email_usuario = ?,
+                senha_usuario = ?,
+                telefone_usuario = ?,
+                foto_usuario = ?,
+                cargo = ?
+            WHERE id_usuario = ?
+        `
+
+        const [resultado] = await db.execute(query, [nome, email, senhaHash, telefone, foto, perfil, id])
+        return resultado.affectedRows
     }
 }

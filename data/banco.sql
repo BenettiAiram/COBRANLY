@@ -10,107 +10,176 @@ USE COBRANLY;
 -- Tabela usuários 
 CREATE TABLE usuarios(
 	id_usuario INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    email_usuario VARCHAR(50) NOT NULL,
+    nome_usuario VARCHAR(100) NOT NULL,
+    email_usuario VARCHAR(50) NOT NULL UNIQUE,
     senha_usuario VARCHAR(100) NOT NULL,
-    cargo ENUM('administrador', 'cobrador', 'devedor')
+    telefone_usuario VARCHAR(20) NOT NULL UNIQUE,
+    foto_usuario VARCHAR(255),
+    cargo ENUM('administrador', 'cobrador', 'devedor') NOT NULL
 );
 
 -- Tabela empresa 
 CREATE TABLE empresa(
 	id_empresa INT AUTO_INCREMENT PRIMARY KEY,
-	nome_empresa VARCHAR(50),
-	email_empresa VARCHAR(50) NOT NULL,
-	encarregado_empresa VARCHAR(50),
-	CNPJ_empresa VARCHAR(18) NOT NULL,
-    telefoneResidencial_empresa VARCHAR(20),
-    telefoneComercial_empresa VARCHAR(20),
-    CEP_empresa VARCHAR(10),
-	bairro_empresa VARCHAR(150),
-	cidade_empresa VARCHAR(150),
-    estado_empresa VARCHAR(150)
-
+	nome_empresa VARCHAR(50) NOT NULL UNIQUE,
+	email_empresa VARCHAR(50) NOT NULL UNIQUE,
+	encarregado_empresa INT NOT NULL,
+	CNPJ_empresa VARCHAR(18) NOT NULL UNIQUE,
+    telefoneComercial_empresa VARCHAR(20) NOT NULL UNIQUE,
+	bairro_empresa VARCHAR(150) NOT NULL,
+	cidade_empresa VARCHAR(150) NOT NULL,
+    estado_empresa VARCHAR(150) NOT NULL,
+    FOREIGN KEY (encarregado_empresa)
+    REFERENCES usuarios (id_usuario)
 );
 
--- Tabela cliente 
-CREATE TABLE cliente(
-	id_cliente INT AUTO_INCREMENT PRIMARY KEY,
-    nome_cliente VARCHAR(50),
-    CPF_cliente VARCHAR(14) NOT NULL, 
-    telefone_cliente VARCHAR(20) NOT NULL,
-    email_cliente VARCHAR(50) NOT NULL,
-    CEP_cliente VARCHAR(10),
-	bairro_cliente VARCHAR(150),
-    cidade_cliente VARCHAR(150),
-    estado_cliente VARCHAR(150),
-    banco_cliente VARCHAR(45),
-    agência_cliente VARCHAR(150),
-    contaCorrente_cliente VARCHAR(45) NOT NULL,
-
-	empresa_id_empresa INT NOT NULL,
-    
-	CONSTRAINT fk_cliente_empresa
-    FOREIGN KEY (empresa_id_empresa)
-    REFERENCES empresa (id_empresa)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-);
 
 -- Tabela cobrança 
 CREATE TABLE cobranca(
 	id_cobranca INT AUTO_INCREMENT PRIMARY KEY,
-    valor_divida DECIMAL(10,2),
-    status_cobranca VARCHAR(45),
-    juros_cobranca VARCHAR(45),
-    multas_cobranca VARCHAR(45),
-    data_vencimento DATE,
-    data_criacao DATE,
+    valor_divida DECIMAL(10,2) NOT NULL,
+    status_cobranca VARCHAR(45) NOT NULL,
+    juros_cobranca VARCHAR(45) NOT NULL,
+    data_vencimento DATE NOT NULL,
+    data_criacao DATE NOT NULL,
 	empresa_id_empresa INT NOT NULL, 
-    cliente_id_cliente INT NOT NULL,
+    usuario_id_usuario INT NOT NULL,
 	CONSTRAINT fk_cobranca_empresa
     FOREIGN KEY (empresa_id_empresa)
     REFERENCES empresa (id_empresa)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
     
-	CONSTRAINT fk_cobranca_cliente
-    FOREIGN KEY (cliente_id_cliente)
-    REFERENCES cliente (id_cliente)
+	CONSTRAINT fk_cobranca_usuario
+    FOREIGN KEY (usuario_id_usuario)
+    REFERENCES usuarios (id_usuario)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 );
 
 -- Administrador
 INSERT INTO usuarios (
+    nome_usuario,
     email_usuario,
     senha_usuario,
+    telefone_usuario,
     cargo
 )
 VALUES (
+    'Helena',
     'administrador@gmail.com',
     '$2a$10$G4McQ/tMSUi6QZgzribY0uM7O/x/ofNJTwIIdMfhmqvM6p5ATpDyS',
+    '12345678910',
     'administrador'
 );
 
 -- Cobrador
 INSERT INTO usuarios (
+    nome_usuario,
     email_usuario,
     senha_usuario,
+    telefone_usuario,
     cargo
 )
 VALUES (
+    'Ravi',
     'cobrador@gmail.com',
     '$2a$10$G4McQ/tMSUi6QZgzribY0uM7O/x/ofNJTwIIdMfhmqvM6p5ATpDyS',
+    '12345678911',
     'cobrador'
 );
 
 -- Devedor
 INSERT INTO usuarios (
+    nome_usuario,
     email_usuario,
     senha_usuario,
+    telefone_usuario,
     cargo
 )
 VALUES (
+    'Lucas',
     'devedor@gmail.com',
     '$2a$10$G4McQ/tMSUi6QZgzribY0uM7O/x/ofNJTwIIdMfhmqvM6p5ATpDyS',
+    '12345678912',
     'devedor'
+);
+
+
+-- Empresa
+INSERT INTO empresa (
+    nome_empresa,
+    email_empresa,
+    encarregado_empresa,
+    CNPJ_empresa,
+    telefoneComercial_empresa,
+    bairro_empresa,
+    cidade_empresa,
+    estado_empresa
+) VALUES (
+    'Vale',
+    'vale@gmail.com',
+    '2',
+    '33.592.510/0001-54',
+    '0800 285 7000',
+    ' Polo Industrial de Tubarão',
+    'Serra',
+    'ES'
+);
+
+INSERT INTO empresa (
+    nome_empresa,
+    email_empresa,
+    encarregado_empresa,
+    CNPJ_empresa,
+    telefoneComercial_empresa,
+    bairro_empresa,
+    cidade_empresa,
+    estado_empresa
+) VALUES (
+    'Arcelor Mittal',
+    'arcelor@gmail.com',
+    '2',
+    '17.469.701/0001-77',
+    '0800 015 1221',
+    ' Polo Industrial de Tubarão',
+    'Serra',
+    'ES'
+);
+
+-- Cobranca
+INSERT INTO cobranca (
+    valor_divida,
+    status_cobranca,
+    juros_cobranca,
+    data_vencimento,
+    data_criacao,
+    empresa_id_empresa,
+    usuario_id_usuario
+) VALUES (
+    1000.00,
+    'pendente',
+    '10%',
+    '2028-07-01',
+    '2025-06-01',
+    1,
+    3
+);
+
+INSERT INTO cobranca (
+    valor_divida,
+    status_cobranca,
+    juros_cobranca,
+    data_vencimento,
+    data_criacao,
+    empresa_id_empresa,
+    usuario_id_usuario
+) VALUES (
+    1500.00,
+    'pendente',
+    '8%',
+    '2027-09-01',
+    '2025-04-01',
+    2,
+    3
 );

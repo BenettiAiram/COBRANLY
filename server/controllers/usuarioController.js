@@ -1,197 +1,191 @@
-// importação do model
 const usuarioModel = require("../models/usuarioModel.js")
-// importar pacotes
-// para criptrograffia
-const bcrypt = require('bcrypt')
-// para lidar com cookies
-const jwt = require('jsonwebtoken')
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+
+function obterUsuarioLogado(req) {
+    const token = req.cookies?.token
+
+    if (!token) return null
+
+    try {
+        return jwt.verify(token, process.env.JWT_SECRET)
+    } catch (erro) {
+        return null
+    }
+}
+
 module.exports = {
-    //FUNÇÕES DE LOGIN
-    login: async (req,res) =>{
-        try{
-            // Pega as infomações das caixinhas da view, de acordo com o name delas
+    login: async (req, res) => {
+        try {
             const { email, senha } = req.body
-            // Executa a função de busca no model
             const usuario = await usuarioModel.buscarPorEmail(email)
-            // Se não existir, mensagem de erro
-            if (!usuario) return res.status(404).render('erro', { mensagem: "Credenciais inválidas"})
-            // compara a senha que o usuário digitou, com a senha do usuario retornado no banco
+
+            if (!usuario) {
+                return res.status(404).render("erro", { mensagem: "Credenciais invalidas" })
+            }
+
             const senhaValida = await bcrypt.compare(senha, usuario.senha)
-            // Se senhas não coincidirem, mensagem de erro
-            if (!senhaValida) return res.status(404).render('erro', { mensagem: "Credenciais inválidas"})
-            // Gera o token de acesso, contendo o perfil 
+
+            if (!senhaValida) {
+                return res.status(404).render("erro", { mensagem: "Credenciais invalidas" })
+            }
+
             const token = jwt.sign(
-                {id: usuario.id, perfil: usuario.perfil, nome: usuario.nome},
+                { id: usuario.id, perfil: usuario.perfil, nome: usuario.nome },
                 process.env.JWT_SECRET,
-                {expiresIn: '2h'}       
+                { expiresIn: "2h" }
             )
-            // Guardar o token nos cookies do navegador
-            res.cookie('token', token, { httpOnly: true })
-            // Redirecionamento de acordo com o perfil
-            if(usuario.perfil === "administrador") return res.redirect("/usuarios/listar")
-            if(usuario.perfil === "cobrador") return res.redirect("/usuarios/listarDevedores")
-            if(usuario.perfil === "devedor") return res.redirect("/usuarios/listarDevedores")
+
+            res.cookie("token", token, { httpOnly: true })
+
+            if (usuario.perfil === "administrador") return res.redirect("/usuarios/listar")
+            if (usuario.perfil === "cobrador") return res.redirect("/usuarios/listarDevedores")
+            if (usuario.perfil === "devedor") return res.redirect("/usuarios/listarDevedores")
+
             return res.redirect("/login")
-        }
-        catch(erro){
+        } catch (erro) {
             console.error(erro)
-            res.status(500).render('erro', { mensagem: "Erro interno no servidor"})
+            res.status(500).render("erro", { mensagem: "Erro interno no servidor" })
         }
     },
-    logout: (req,res) =>{
-        //Limpa o token dos cookies
-        res.clearCookie('token')
-        // Volta pra tela de login
+
+    logout: (req, res) => {
+        res.clearCookie("token")
         res.redirect("/login")
     },
-    
-    // CRUD
-    // CRIAR USUÁRIOS
-    renderizarCadastro: (req,res) => {
-        res.render('usuarios/cadastrar')
-    },
-    cadastrar: async (req,res) => {
-        try{
-        // Objeto com as informações preenchidas nos inputs
-        const { nome, email, senha, telefone, perfil } = req.body
-        // Não deixa o usuário cadastrar um adm
-        if(perfil === 'administrador'){
-            return res.status(403).render('erro', {mensagem: "Você não possui acesso"})
-        }
-        // Multer salva a imagem na pasta, e a variável guarda o nome dela caso o usuário tenha anexado uma imagem
-        const fotoDaPessoa = req.file ? `uploads/usuarios/${req.file.filename}` : null
-        // Criptrografa a senha do usuario
-        const senhaHash = await bcrypt.hash(senha, 10)
-        // Chama o model passando as informações já corrigidas
-        await usuarioModel.criarUsuario(nome, email, senhaHash, telefone, fotoDaPessoa, perfil )
-        // Variável pra guardar onde tem de redirecionar o usuário
-        let redirecionadoPara = '/login'
-        // Verifica se já tem alguém logado, analisando se há algum token salvo
-        if(req.cookies && req.cookies.token){
-            try{
-                // Lê o token, e se o usuário atual for um adm, redireciona para tela geral dos adm
-                const decodificado = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
-                if (decodificado.perfil === 'administrador'){
-                    redirecionadoPara = '/usuarios/listar'
-                }
-            }
-            catch (erro){
-                // Segue o jogo indo pra login mesmo
-            }
-        }
-        // Ao fim, redireciona o usuário pra onde ele tem que ir, /login ou /usuarios 
-        res.redirect(redirecionadoPara)
-    }
-    catch(erro){
-        console.error(erro)
-        res.status(500).render('erro', {mensagem: "Erro ao cadastrar usuário"})
-    }
-    },
-    //READ - LISTAR USUÁRIOS
-    listar: async(req,res) => {
-        try{
-            // Se deu certo, mostra a página de usuários
-            const usuarios = await usuarioModel.listarUsuarios()
-            // Renderiza a tela de usuários, passando o objeto com a lista completa
-            res.render('usuarios/listar', { usuarios })
-        }
-        catch(erro){
-            // se deu erro, mostra a tela de erro padrão pra pessoa
-            res.status(500).render('erro', {mensagem: "Erro ao listar usuários"})           
-        }
+
+    renderizarCadastro: (req, res) => {
+        res.render("usuarios/cadastrar")
     },
 
-    listarDevedores: async(req,res) => {
-        try{
-            // Se deu certo, mostra a página de usuários
-            const usuarios = await usuarioModel.listarDevedores()
-            // Renderiza a tela de usuários, passando o objeto com a lista completa
-            res.render('usuarios/listarDevedores', { usuarios })
-        }
-        catch(erro){
-            // se deu erro, mostra a tela de erro padrão pra pessoa
-            res.status(500).render('erro', {mensagem: "Erro ao listar devedores"})           
-        }
-    },
-
-    // DELETE - DELETAR UM USUÁRIO COM BASE NO ID
-    deletar: async(req,res) => {
-        try{
-            // Pega o id do usuário, vindo da url da requisição
-            const idVindoDaUrl = req.params.id
-            // Chama a função no model, passando o id coletado
-            await usuarioModel.deletarUsuario(idVindoDaUrl)
-            // Redirecionar o usuário
-            res.redirect("/usuarios/listar")
-        }
-        catch(erro){
-        // se deu erro, mostra a tela de erro padrão pra pessoa
-        res.status(500).render('erro', {mensagem: "Erro ao deletar usuário"})
-        }
-    },
-
-    // UPDATE - ATUALIZAR UM USUÁRIO COM BASE NO ID
-    // RENDERIZA A PÁGINA DE CADASTRO
-    editar: async (req,res) => {
-        try{
-            // Busca o id do usuário, vindo da url da requisição, através do req.params
-            // Exemplo: editar/5 <- o 5 é o id do indivíduo
-            const idVindoDaUrl = req.params.id
-            // Chama o model para buscar as informações
-            const usuarioEditado = await usuarioModel.buscarPorId(idVindoDaUrl)
-            // renderiza a página de editar, já com o formulário preenchido com as informações
-            res.render('usuarios/editar', { usuarioEditado })
-        }
-        catch(erro){
-           res.status(500).render('erro', {mensagem: "Erro ao abrir tela de edição" })     
-        }
-    },
-    // ATUALIZA O USUÁRIO COM AS NOVAS INFORMAÇÕES
-    atualizarUsuario: async (req,res) => {
-        try{
-            // Busca o id do usuário, vindo da url da requisição, através do req.params
-            // Exemplo: editar/5 <- o 5 é o id do indivíduo
-            const idVindoDaUrl = req.params.id
-            // Cria um objeto com as informações das caixinhas
+    cadastrar: async (req, res) => {
+        try {
             const { nome, email, senha, telefone, perfil } = req.body
-            // Resgata o caminho da foto, vindo do multer
-            const fotoDaPessoa = req.file ? `/uploads/usuarios/${req.file.filename}` : null
-            // Parte da senha, caso necessário
-            let senhaHash
-            if(senha && senha.trim() !== ''){
-                // Se o campo senha estiver preenchido, criptrografa a nova senha
-                senhaHash = await bcrypt.hash(senha,10)
-            }else{
-                // Se o campo senha estiver em branco, deixa a mesma que tava antes
-                const usuarioAntigo = await usuarioModel.buscarPorId(idVindoDaUrl)
-                senhaHash = usuarioAntigo.senha
+            const perfisPermitidos = ["administrador", "cobrador", "devedor"]
+            const usuarioLogado = obterUsuarioLogado(req)
+
+            if (!perfisPermitidos.includes(perfil)) {
+                return res.status(400).render("erro", { mensagem: "Perfil invalido" })
             }
-            // Chamar o model, e atualizar o usuário
+
+            if (perfil === "administrador" && usuarioLogado?.perfil !== "administrador") {
+                return res.status(403).render("erro", { mensagem: "Voce nao possui acesso" })
+            }
+
+            const fotoDaPessoa = req.file ? `/uploads/usuarios/${req.file.filename}` : null
+            const senhaHash = await bcrypt.hash(senha, 10)
+
+            await usuarioModel.criarUsuario(nome, email, senhaHash, telefone, fotoDaPessoa, perfil)
+
+            let redirecionadoPara = "/login"
+
+            if (usuarioLogado?.perfil === "administrador") {
+                redirecionadoPara = "/usuarios/listar"
+            } else if (usuarioLogado?.perfil === "cobrador" || usuarioLogado?.perfil === "devedor") {
+                redirecionadoPara = "/usuarios/listarDevedores"
+            }
+
+            res.redirect(redirecionadoPara)
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render("erro", { mensagem: "Erro ao cadastrar usuario" })
+        }
+    },
+
+    listar: async (req, res) => {
+        try {
+            const usuarios = await usuarioModel.listarUsuarios()
+            res.render("usuarios/listar", { usuarios })
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render("erro", { mensagem: "Erro ao listar usuarios" })
+        }
+    },
+
+    listarDevedores: async (req, res) => {
+        try {
+            const usuarios = await usuarioModel.listarDevedores()
+            res.render("usuarios/listarDevedores", { usuarios })
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render("erro", { mensagem: "Erro ao listar devedores" })
+        }
+    },
+
+    deletar: async (req, res) => {
+        try {
+            const idVindoDaUrl = req.params.id
+            await usuarioModel.deletarUsuario(idVindoDaUrl)
+            res.redirect("/usuarios/listar")
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render("erro", { mensagem: "Erro ao deletar usuario" })
+        }
+    },
+
+    editar: async (req, res) => {
+        try {
+            const idVindoDaUrl = req.params.id
+            const usuarioEditado = await usuarioModel.buscarPorId(idVindoDaUrl)
+
+            if (!usuarioEditado) {
+                return res.status(404).render("erro", { mensagem: "Usuario nao encontrado" })
+            }
+
+            res.render("usuarios/editar", { usuarioEditado })
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render("erro", { mensagem: "Erro ao abrir tela de edicao" })
+        }
+    },
+
+    atualizarUsuario: async (req, res) => {
+        try {
+            const idVindoDaUrl = req.params.id
+            const { nome, email, senha, telefone, perfil } = req.body
+            const perfisPermitidos = ["administrador", "cobrador", "devedor"]
+
+            if (!perfisPermitidos.includes(perfil)) {
+                return res.status(400).render("erro", { mensagem: "Perfil invalido" })
+            }
+
+            const usuarioAntigo = await usuarioModel.buscarPorId(idVindoDaUrl)
+
+            if (!usuarioAntigo) {
+                return res.status(404).render("erro", { mensagem: "Usuario nao encontrado" })
+            }
+
+            const fotoDaPessoa = req.file ? `/uploads/usuarios/${req.file.filename}` : usuarioAntigo.foto
+            const senhaHash = senha && senha.trim() !== ""
+                ? await bcrypt.hash(senha, 10)
+                : usuarioAntigo.senha
+
             await usuarioModel.atualizarUsuario(idVindoDaUrl, nome, email, senhaHash, telefone, fotoDaPessoa, perfil)
             res.redirect("/usuarios/listar")
-        }
-        catch(erro){
-           res.status(500).render('erro', {mensagem: "Erro ao editar usuário" })     
-        }
-    },
-    // RENDERIZA A PÁGINA DE RECUPERAÇÃO DE SENHA
-    RecuperarSenha: async (req,res) => {
-        try{
-            res.render('auth/recuperar_senha')
-        }
-        catch(erro){
-            res.status(500).render('erro', {mensagem: "Erro ao abrir tela de recuperação de senha" })     
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render("erro", { mensagem: "Erro ao editar usuario" })
         }
     },
-    enviarRecuperacaoSenha: async (req,res) => {
-        try{
-            res.render('auth/recuperar_senha', {
+
+    RecuperarSenha: async (req, res) => {
+        try {
+            res.render("auth/recuperar_senha")
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render("erro", { mensagem: "Erro ao abrir tela de recuperacao de senha" })
+        }
+    },
+
+    enviarRecuperacaoSenha: async (req, res) => {
+        try {
+            res.render("auth/recuperar_senha", {
                 success: "Se o e-mail estiver cadastrado, enviaremos as instrucoes de recuperacao.",
                 formData: req.body
             })
-        }
-        catch(erro){
-            res.status(500).render('erro', {mensagem: "Erro ao solicitar recuperacao de senha" })
+        } catch (erro) {
+            console.error(erro)
+            res.status(500).render("erro", { mensagem: "Erro ao solicitar recuperacao de senha" })
         }
     }
 }
