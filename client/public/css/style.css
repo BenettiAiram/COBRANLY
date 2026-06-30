@@ -186,3 +186,72 @@ label{
     max-height: 250px;
     object-fit: contain; /* Ajusta pra não distorcer a imagem*/
 }
+
+@media (max-width: 768px) {
+    .header-sistema {
+        padding: 15px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-sistema a {
+        width: 100%;
+    }
+
+    .header-sistema img {
+        max-width: 180px;
+        height: auto;
+    }
+
+    .nav-menu {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .nav-menu > * {
+        width: 100%;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .nav-menu .btn,
+    .nav-menu .dropdown-btn {
+        width: 100%;
+        text-align: left;
+    }
+
+    .container,
+    .login-container {
+        padding: 15px;
+    }
+
+    .login-container {
+        align-items: flex-start;
+    }
+
+    .form-control {
+        font-size: 16px;
+    }
+
+    label {
+        font-size: 16px;
+    }
+
+    .tabela-dados {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .acoes-tabela {
+        white-space: normal;
+    }
+
+    .card {
+        max-width: 100% !important;
+        padding: 1.25rem !important;
+    }
+}

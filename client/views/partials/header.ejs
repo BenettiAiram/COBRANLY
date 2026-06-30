@@ -22,12 +22,12 @@
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
-    <header class="header-sistema">
-      <a href="#">
-        <img src="/img/cobranly.png" alt="logo" width="auto" height="100" />
+    <header class="header-sistema d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <a href="/" class="d-flex align-items-center">
+        <img src="/img/cobranly.png" alt="logo" class="img-fluid" style="max-height: 100px; width: auto;" />
       </a>
       <!-- Opções de menu, na direita -->
-      <nav class="nav-menu">
+      <nav class="nav-menu d-flex flex-wrap align-items-center justify-content-end gap-2">
 
         <!-- SE TIVER LOGADO -->
         <% if(typeof usuario !== 'undefined' && usuario){ %>
@@ -59,17 +59,17 @@
                 </li>
                 <li>
                   <a href="/cobrancas/listar" class="dropdown-item">
-                    <i class="fa-solid fa-user-plus"></i> Vizualizar cobranças
+                    <i class="fa-solid fa-money-bill"></i> Vizualizar cobranças
                   </a>
                 </li>
                 <li>
                   <a href="/empresas/listar" class="dropdown-item">
-                    <i class="fa-solid fa-user-plus"></i> Visualizar empresas
+                    <i class="fa-solid fa-building"></i> Visualizar empresas
                   </a>
                 </li>
                 <li>
                   <a href="/empresas/cadastro" class="dropdown-item">
-                    <i class="fa-solid fa-user-plus"></i> Cadastrar empresas
+                    <i class="fa-solid fa-building"></i> Cadastrar empresas
                   </a>
                 </li>
               </ul>
@@ -84,12 +84,17 @@
               <button class="dropdown-btn dropdown-toggle btn" type="button"
               data-bs-toggle="dropdown" aria-expanded="false"
               style="background: transparent; border: none;">
-                <i class="fa-solid fa-box"></i> Visualizar Devedores
+                <i class="fa-solid fa-user"></i> Meu painel
               </button>
               <ul class="dropdown-menu">
                 <li>
                   <a href="/cobrancas/listar" class="dropdown-item">
-                    <i class="fa-solid fa-shop"></i> Visualizar cobranças
+                    <i class="fa-solid fa-money-bill"></i> Visualizar cobranças
+                  </a>
+                </li>
+                <li>
+                  <a href="/usuarios/listarDevedores" class="dropdown-item">
+                    <i class="fa-solid fa-users"></i> Visualizar devedores
                   </a>
                 </li>
               </ul>

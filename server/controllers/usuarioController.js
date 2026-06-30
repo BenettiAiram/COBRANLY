@@ -40,7 +40,7 @@ module.exports = {
 
             if (usuario.perfil === "administrador") return res.redirect("/usuarios/listar")
             if (usuario.perfil === "cobrador") return res.redirect("/usuarios/listarDevedores")
-            if (usuario.perfil === "devedor") return res.redirect("/usuarios/listarDevedores")
+            if (usuario.perfil === "devedor") return res.redirect("/cobrancas/listar")
 
             return res.redirect("/login")
         } catch (erro) {
