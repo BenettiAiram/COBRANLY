@@ -179,9 +179,40 @@ module.exports = {
 
     enviarRecuperacaoSenha: async (req, res) => {
         try {
-            res.render("auth/recuperar_senha", {
-                success: "Se o e-mail estiver cadastrado, enviaremos as instrucoes de recuperacao.",
-                formData: req.body
+            const { email } = req.body
+
+            const usuario = await usuarioModel.buscarPorEmail(email)
+
+            if (!usuario) {
+                return res.render("auth/recuperar_senha", {
+                    error: "E-mail não cadastrado no sistema.",
+                    formData: req.body
+                })
+            }
+
+            const { senha } = req.body
+
+            if (!senha || senha.trim().length < 6) {
+                return res.render("auth/recuperar_senha", {
+                    error: "A nova senha deve ter ao menos 6 caracteres.",
+                    formData: req.body
+                })
+            }
+
+            const senhaHash = await bcrypt.hash(senha, 10)
+
+            await usuarioModel.atualizarUsuario(
+                usuario.id,
+                usuario.nome,
+                usuario.email,
+                senhaHash,
+                usuario.telefone,
+                usuario.foto,
+                usuario.perfil
+            )
+
+            return res.render("auth/recuperar_senha", {
+                success: "Senha alterada com sucesso!!"
             })
         } catch (erro) {
             console.error(erro)

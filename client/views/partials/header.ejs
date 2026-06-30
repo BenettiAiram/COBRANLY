@@ -54,7 +54,22 @@
                 </li>
                 <li>
                   <a href="/usuarios/cadastro" class="dropdown-item">
-                    <i class="fa-solid fa-user-plus"></i> Cadastrar novo
+                    <i class="fa-solid fa-user-plus"></i> Cadastrar usuario
+                  </a>
+                </li>
+                <li>
+                  <a href="/cobrancas/listar" class="dropdown-item">
+                    <i class="fa-solid fa-user-plus"></i> Vizualizar cobranças
+                  </a>
+                </li>
+                <li>
+                  <a href="/empresas/listar" class="dropdown-item">
+                    <i class="fa-solid fa-user-plus"></i> Visualizar empresas
+                  </a>
+                </li>
+                <li>
+                  <a href="/empresas/cadastro" class="dropdown-item">
+                    <i class="fa-solid fa-user-plus"></i> Cadastrar empresas
                   </a>
                 </li>
               </ul>
@@ -69,20 +84,43 @@
               <button class="dropdown-btn dropdown-toggle btn" type="button"
               data-bs-toggle="dropdown" aria-expanded="false"
               style="background: transparent; border: none;">
-                <i class="fa-solid fa-box"></i> Meus Devedores
+                <i class="fa-solid fa-box"></i> Visualizar Devedores
               </button>
               <ul class="dropdown-menu">
                 <li>
-                  <a href="/usuarios/listarDevedores" class="dropdown-item">
-                    <i class="fa-solid fa-shop"></i> Meu painel
+                  <a href="/cobrancas/listar" class="dropdown-item">
+                    <i class="fa-solid fa-shop"></i> Visualizar cobranças
                   </a>
                 </li>
               </ul>
             </div>
+            
+          <% } %>
 
-            <a href="/usuarios/listarDevedores" class="btn" style="border:none; background: transparent; padding: 10px">
-              <i class="fa-solid fa-shop"></i> Vitrine Publica
-            </a>
+          <!-- Se for devedor -->
+          <% if(usuario.perfil === 'devedor'){ %>
+
+            <div class="dropdown d-inline-block">
+              <button class="dropdown-btn dropdown-toggle btn" type="button"
+              data-bs-toggle="dropdown" aria-expanded="false"
+              style="background: transparent; border: none;">
+                <i class="fa-solid fa-box"></i> Minhas dívidas
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="/cobrancas/listar" class="dropdown-item">
+                    <i class="fa-solid fa-shop"></i> Visualizar dívidas
+                  </a>
+                </li>
+                <li>
+                  <a href="/cobrancas/cadastro" class="dropdown-item">
+                    <i class="fa-solid fa-shop"></i> Cadastrar dívida
+                  </a>
+                </li>
+              </ul>
+
+
+            </div>
 
           <% } %>
 

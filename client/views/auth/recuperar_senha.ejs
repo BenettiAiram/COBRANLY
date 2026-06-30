@@ -9,7 +9,7 @@
             <!-- Ícone de cadeado aberto, mesma escala do login -->
             <i class="fa-solid fa-lock-open fa-4x" style="color: var(--cor-destaque); margin-bottom: 10px;"></i>
             <h2 style="margin: 0;">Recuperar Senha</h2>
-            <p style="color: var(--cor-texto-secundario); margin-top: 5px;">Informe seu e-mail e enviaremos um link para redefinir sua senha.</p>
+            <p style="color: var(--cor-texto-secundario); margin-top: 5px;">Informe seu e-mail para redefinir sua senha</p>
         </div>
 
         <!-- Flash de erro -->
@@ -48,11 +48,22 @@
                     required
                     autofocus
                 >
+                <label for="senha_recuperacao" style="margin-top: 10px;">
+                    <i class="fa-solid fa-lock"></i> Nova Senha
+                </label>
+                <input
+                    type="password"
+                    id="senha_recuperacao"
+                    name="senha"
+                    class="form-control"
+                    placeholder="Digite sua nova senha"
+                    required
+                >
             </div>
 
             <!-- Botão de envio -->
             <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px; font-size: 16px;">
-                <i class="fa-solid fa-paper-plane"></i> Enviar link de recuperação
+                <i class="fa-solid fa-paper-plane"></i> Salvar nova senha
             </button>
 
             <!-- Link de volta ao login -->
@@ -61,7 +72,6 @@
                     Lembrou a senha? <span style="color: var(--cor-destaque); text-decoration: underline;">Voltar ao login</span>
                 </a>
             </div>
-
         </form>
     </div>
 </main>
