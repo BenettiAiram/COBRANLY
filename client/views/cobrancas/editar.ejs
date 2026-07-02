@@ -1,108 +1,73 @@
-<!-- importa o header -->
 <%- include('../partials/header') %>
 
-<!-- MAIN : com o conteúdo da página-->
 <main>
     <div class="container">
-        <!-- Estilo do card geral -->
         <div class="card"
-        style="padding: 2rem; border: 2px solid var(--cor-borda); box-shadow: 6px 6px 0px var(--cor-borda); 
-        background-color: var(--cor-fundo);">
-            <!-- Texto inicial -->
-            <h2 style="color: var(--cor-destaque); text-align: center; margin-bottom: 5px;"> 
-                <i class="fa-solid fa-user-pen"></i>
-                EDITAR PERFIL
+             style="padding: 2rem; border: 2px solid var(--cor-borda); box-shadow: 6px 6px 0px var(--cor-borda); background-color: var(--cor-fundo);">
+            <h2 style="color: var(--cor-destaque); text-align: center; margin-bottom: 5px;">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                EDITAR COBRANÇA
             </h2>
-            <!-- Formulário de ATUALIZAÇÃO -->
-            <form action="/usuarios/atualizar/<%= usuarioEditado.id %>" method="post" enctype="multipart/form-data">
-
+            <form action="/cobrancas/atualizar/<%= cobranca.id %>" method="post">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-12">
                         <fieldset>
-                            <legend class="float-none w-auto"> Informações pessoais </legend>
+                            <legend class="float-none w-auto">Dados da cobrança</legend>
                         </fieldset>
 
-                        <!-- Caixinha de nome -->
-                         <div class="form-group">
-                            <label for="nome">
-                                <i class="fa-solid fa-id-card"></i> Nome Completo:      
-                            </label>
-                            <input type="text" id="nome" name="nome" class="form-control" value="<%= usuarioEditado.nome %>" required>
-                         </div>
-                         <!-- Legenda divisão 2 -->
-                        <fieldset class="mt-3">
-                            <legend class="float-none w-auto"> Informações de login </legend>
-                        </fieldset>
-
-                        <!-- Caixinha de email -->
                         <div class="form-group">
-                            <label for="email"> <i class="fa-solid fa-envelope"></i> Email:</label>
-                            <input type="email" id="email" name="email" class="form-control" value="<%= usuarioEditado.email %>" required>
+                            <label for="valor"> <i class="fa-solid fa-money-bill-wave"></i> Valor da dívida:</label>
+                            <input type="text" id="valor" name="valor" class="form-control" value="<%= cobranca.valor %>" required>
                         </div>
 
-                        <!-- Caixinha de perfil -->
-                        <div class="form-group">
-                            <label for="perfil"> <i class="fa-solid fa-users"></i> Papel do usuário: (passível de mudança) </label>
-                            <select name="perfil" id="perfil" class="form-control" required>
-                                <option value="cobrador" <%= usuarioEditado.perfil === "cobrador" ? 'selected': '' %>> 
-                                    Cobrador 
-                                </option>
-                                <option value="administrador" <%= usuarioEditado.perfil === "administrador" ? 'selected': '' %>> 
-                                    Administrador 
-                                </option>
+                        <div class="form-group mt-3">
+                            <label for="status"> <i class="fa-solid fa-hourglass-half"></i> Status:</label>
+                            <select name="status" id="status" class="form-control" required>
+                                <option value="">Selecione</option>
+                                <option value="pendente" <%= cobranca.status === 'pendente' ? 'selected' : '' %>>Pendente</option>
+                                <option value="atrasado" <%= cobranca.status === 'atrasado' ? 'selected' : '' %>>Atrasado</option>
+                                <option value="pago" <%= cobranca.status === 'pago' ? 'selected' : '' %>>Pago</option>
                             </select>
                         </div>
-                        <!-- Caixinha de foto -->
-                        <div class="form-group">
-                            <label for="foto"><i class="fa-solid fa-camera"></i> Foto do produto</label>
-                            <input type="file" name="foto" id="foto" class="form-control" accept="image/*" >
+
+                        <div class="form-group mt-3">
+                            <label for="juros"> <i class="fa-solid fa-percent"></i> Juros:</label>
+                            <input type="text" id="juros" name="juros" class="form-control" value="<%= cobranca.juros %>" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="dataVencimento"> <i class="fa-solid fa-calendar-days"></i> Data de vencimento:</label>
+                            <input type="date" id="dataVencimento" name="dataVencimento" class="form-control" value="<%= cobranca.dataVencimento %>" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="empresaId"> <i class="fa-solid fa-building"></i> Empresa:</label>
+                            <select name="empresaId" id="empresaId" class="form-control" required>
+                                <option value="">Selecione</option>
+                                <% empresas.forEach(function (empresa) { %>
+                                  <option value="<%= empresa.id %>" <%= empresa.id === cobranca.empresaId ? 'selected' : '' %>><%= empresa.nome %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="usuarioId"> <i class="fa-solid fa-user"></i> Devedor:</label>
+                            <select name="usuarioId" id="usuarioId" class="form-control" required>
+                                <option value="">Selecione</option>
+                                <% devedores.forEach(function (devedor) { %>
+                                  <option value="<%= devedor.id %>" <%= devedor.id === cobranca.usuarioId ? 'selected' : '' %>><%= devedor.nome %></option>
+                                <% }) %>
+                            </select>
                         </div>
                     </div>
-                    <!-- SEGUNDA COLUNA -->
-                    <div class="col">
-                    <!-- Legenda divisão 1 -->
-                        <fieldset>
-                            <legend class="float-none w-auto text-white"> - </legend>
-                        </fieldset>
-
-                        <!-- Caixinha de telefone -->
-                         <div class="form-group">
-                            <label for="telefone">
-                                <i class="fa-solid fa-phone"></i> Telefone / Whatsapp:      
-                            </label>
-                            <input type="text" id="telefone" name="telefone" class="form-control" value="<%= usuarioEditado.telefone %>"required>
-                         </div>
-                         <!-- Legenda divisão 2 -->
-                        <fieldset class="mt-3">
-                            <legend class="float-none w-auto text-white"> - </legend>
-                        </fieldset>
-
-                        <!-- Caixinha de senha -->
-                         <div class="form-group"> 
-                            <label for="senha"> <i class="fa-solid fa-lock"></i> Senha (deixe em branco se não quiser mudar):</label>
-                            <input type="password" name="senha" id="senha" class="form-control" >
-                         </div>
-
-                         <!-- PREVIEW DA IMAGEM -->
-                          <div id="preview-box" class="preview-container max-width:100%">
-                            <!-- Verifica se o usuário já possui foto cadastrada -->
-                            <% if (usuarioEditado.foto) {%>
-                              <img src="<%= usuarioEditado.foto %>" alt="Foto do usuário" id="preview-img" style="height: 230px; width: auto;">
-                            <% } else { %>
-                              <img src="..." alt="Foto do usuário" id="preview-img" style="height: 230px; width: auto;">
-                            <% } %>
-
-                          </div>
-                    </div>
                 </div>
-                <!-- Botão de envio do formulário -->
-                 <button type="submit" class="btn btn-secondary" style="width: 100%; margin-top: 15px;">
+
+                <button type="submit" class="btn btn-secondary" style="width: 100%; margin-top: 15px;">
                     <i class="fa-solid fa-floppy-disk"></i> SALVAR ALTERAÇÕES
-                 </button>
+                </button>
             </form>
         </div>
     </div>
 </main>
 
-<!-- importa o footer -->
 <%- include('../partials/footer') %>

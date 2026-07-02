@@ -1,47 +1,50 @@
 <%- include('../partials/header') %>
 
 <main class="container">
-    <h2>Lista de usuarios</h2>
-
-    <a href="/usuarios/cadastro" class="btn btn-primary">
-        <i class="fa-solid fa-users-plus"></i> Novo usuario
-    </a>
+    <div class="d-flex justify-content-between align-items-center mb-3 gap-2 flex-wrap">
+      <h2>Lista de cobranças</h2>
+      <div class="d-flex gap-2 flex-wrap">
+        <% if (typeof usuario !== 'undefined' && (usuario?.perfil === 'administrador' || usuario?.perfil === 'cobrador')) { %>
+          <a href="/cobrancas/cadastro" class="btn btn-primary">
+            <i class="fa-solid fa-file-invoice-dollar"></i> Cadastrar cobrança
+          </a>
+          <a href="/cobrancas/relatorio" class="btn btn-success">
+            <i class="fa-solid fa-chart-line"></i> Ver relatório
+          </a>
+        <% } %>
+      </div>
+    </div>
 
     <table class="tabela-dados border-ragius">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Perfil</th>
-                <th>Acoes</th>
+                <th>Empresa</th>
+                <th>Valor</th>
+                <th>Juros</th>
+                <th>Status</th>
+                <th>Data de Vencimento</th>
             </tr>
         </thead>
         <tbody>
-            <% if (usuarios && usuarios.length > 0) { %>
-                <% usuarios.forEach(function (user) { %>
+            <% if (cobrancas && cobrancas.length > 0) { %>
+                <% cobrancas.forEach(function (cobranca) { %>
                     <tr>
-                        <td><%= user.id %></td>
-                        <td><%= user.nome || '-' %></td>
-                        <td><%= user.email %></td>
-                        <td><%= user.perfil ? user.perfil.toUpperCase() : '-' %></td>
-                        <td class="acoes-tabela">
-                            <a href="/usuarios/editar/<%= user.id %>" class="btn btn-secondary">
-                                <i class="fa-solid fa-pen"></i> Editar
-                            </a>
-
-                            <form action="/usuarios/deletar/<%= user.id %>" method="post"
-                                  onsubmit="return confirm('Deseja realmente fazer a exclusao?')">
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fa-solid fa-trash"></i> Excluir
-                                </button>
-                            </form>
+                        <td><%= cobranca.id %></td>
+                        <td><%= cobranca.empresa || '-' %></td>
+                        <td><%= cobranca.valor ? Number(cobranca.valor).toFixed(2) : '-' %></td>
+                        <td><%= cobranca.jurosExibicao || (cobranca.juros ? (String(cobranca.juros).trim().endsWith('%') ? cobranca.juros : String(cobranca.juros).trim() + '%') : '-') %></td>
+                        <td>
+                            <span class="status-badge <%= cobranca.statusClass || ((cobranca.status || '').toLowerCase().trim() === 'pago' ? 'status-pago' : 'status-' + (cobranca.status || '').toLowerCase().trim()) %>">
+                                <%= cobranca.status || '-' %>
+                            </span>
                         </td>
+                        <td><%= cobranca.dataVencimento || '-' %></td>
                     </tr>
                 <% }) %>
             <% } else { %>
                 <tr>
-                    <td colspan="5" class="tabela-vazia">Nenhum usuario cadastrado.</td>
+                    <td colspan="6" class="tabela-vazia">Nenhuma cobrança cadastrada.</td>
                 </tr>
             <% } %>
         </tbody>

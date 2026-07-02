@@ -144,7 +144,7 @@ body{
 }
 
 /* texto de apoio */
-label{
+.label{
     font-weight: bold;
     font-size: 20px;
 }
@@ -164,10 +164,84 @@ label{
     display: inline-block;
 }
 
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
 /* botão em destaque */
 .btn:hover{
     background-color: var(--cor-destaque);
     border-color: var(--cor-destaque);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-weight: bold;
+    text-transform: capitalize;
+    font-size: 0.9rem;
+}
+
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    font-weight: bold;
+    text-transform: none;
+    font-size: 0.9rem;
+    min-width: 120px;
+}
+
+.btn-action.btn-secondary {
+    background-color: #000000;
+    border-color: #000000;
+    color: #ffffff;
+}
+
+.btn-action.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.btn-action.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #ffffff;
+}
+
+.btn-action.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.status-pendente {
+    background-color: #ffe59a;
+    color: #5f4a00;
+    border: 1px solid #f0d884;
+}
+
+.status-atrasado {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+
+.status-pago,
+.status-paga {
+    background-color: #d1e7dd;
+    color: #0c4d2f;
+    border: 2px solid #badbcc;
 }
 
 /* CAIXINHA DE IMAGEM */

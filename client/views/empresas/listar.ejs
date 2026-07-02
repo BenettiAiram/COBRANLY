@@ -1,10 +1,10 @@
 <%- include('../partials/header') %>
 
 <main class="container">
-    <h2>Lista de usuarios</h2>
+    <h2>Lista de empresas</h2>
 
-    <a href="/usuarios/cadastro" class="btn btn-primary">
-        <i class="fa-solid fa-users-plus"></i> Novo usuario
+    <a href="/empresas/cadastro" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Nova empresa
     </a>
 
     <table class="tabela-dados border-ragius">
@@ -12,36 +12,32 @@
             <tr>
                 <th>Id</th>
                 <th>Nome</th>
-                <th>Email</th>
-                <th>Perfil</th>
-                <th>Acoes</th>
+                <th>Responsável</th>
+                <th>Status</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
-            <% if (usuarios && usuarios.length > 0) { %>
-                <% usuarios.forEach(function (user) { %>
+            <% if (empresas && empresas.length > 0) { %>
+                <% empresas.forEach(function (empresa) { %>
                     <tr>
-                        <td><%= user.id %></td>
-                        <td><%= user.nome || '-' %></td>
-                        <td><%= user.email %></td>
-                        <td><%= user.perfil ? user.perfil.toUpperCase() : '-' %></td>
+                        <td><%= empresa.id %></td>
+                        <td><%= empresa.nome || '-' %></td>
+                        <td><%= empresa.responsavel || '-' %></td>
+                        <td><%= empresa.status || '-' %></td>
                         <td class="acoes-tabela">
-                            <a href="/usuarios/editar/<%= user.id %>" class="btn btn-secondary">
+                            <button class="btn btn-secondary" disabled>
                                 <i class="fa-solid fa-pen"></i> Editar
-                            </a>
-
-                            <form action="/usuarios/deletar/<%= user.id %>" method="post"
-                                  onsubmit="return confirm('Deseja realmente fazer a exclusao?')">
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fa-solid fa-trash"></i> Excluir
-                                </button>
-                            </form>
+                            </button>
+                            <button class="btn btn-danger" disabled>
+                                <i class="fa-solid fa-trash"></i> Excluir
+                            </button>
                         </td>
                     </tr>
                 <% }) %>
             <% } else { %>
                 <tr>
-                    <td colspan="5" class="tabela-vazia">Nenhum usuario cadastrado.</td>
+                    <td colspan="5" class="tabela-vazia">Nenhuma empresa cadastrada.</td>
                 </tr>
             <% } %>
         </tbody>

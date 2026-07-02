@@ -1,0 +1,58 @@
+<%- include('../partials/header') %>
+
+<main class="container">
+  <h2>Relatório de cobranças</h2>
+
+  <section class="relatorio-resumo mb-4">
+    <div class="card p-3 mb-3">
+      <h4>Total geral</h4>
+      <p><strong>Valor total das dívidas:</strong> R$ <%= totalDividas.toFixed(2) %></p>
+      <p><strong>Total pendente:</strong> R$ <%= totalPendentes.toFixed(2) %></p>
+      <p><strong>Total pago:</strong> R$ <%= totalPagas.toFixed(2) %></p>
+    </div>
+  </section>
+
+  <section class="relatorio-detalhado">
+    <table class="tabela-dados border-ragius">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Empresa</th>
+          <th>Devedor</th>
+          <th>Valor</th>
+          <th>Status</th>
+          <th>Juros</th>
+          <th>Vencimento</th>
+          <th>Criada em</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (cobrancas && cobrancas.length > 0) { %>
+          <% cobrancas.forEach(function (cobranca) { %>
+            <tr>
+              <td><%= cobranca.id %></td>
+              <td><%= cobranca.empresa || '-' %></td>
+              <td><%= cobranca.devedor || '-' %></td>
+              <td>R$ <%= Number(cobranca.valor).toFixed(2) %></td>
+              <% const normalizedStatus = (cobranca.status || '').toLowerCase().trim(); %>
+              <% const statusClass = normalizedStatus === 'pago' ? 'status-pago' : 'status-' + normalizedStatus; %>
+              <td><span class="status-badge <%= statusClass %>"><%= cobranca.status %></span></td>
+              <td>
+                <% const jurosValor = cobranca.juros ? cobranca.juros.toString().trim() : '' %>
+                <%= jurosValor ? (jurosValor.endsWith('%') ? jurosValor : jurosValor + '%') : '-' %>
+              </td>
+              <td><%= cobranca.dataVencimento || '-' %></td>
+              <td><%= cobranca.dataCriacao || '-' %></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="8" class="tabela-vazia">Nenhuma cobrança encontrada.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

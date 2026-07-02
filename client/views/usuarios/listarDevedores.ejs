@@ -22,13 +22,13 @@
                         <td><%= user.email %></td>
                         <td><%= user.perfil ? user.perfil.toUpperCase() : '-' %></td>
                         <td class="acoes-tabela">
-                            <a href="/usuarios/editar/<%= user.id %>" class="btn btn-secondary">
+                            <a href="/usuarios/editar/<%= user.id %>" class="btn btn-action btn-secondary">
                                 <i class="fa-solid fa-pen"></i> Editar
                             </a>
 
-                            <form action="/usuarios/deletar/<%= user.id %>" method="post"
+                            <form action="/usuarios/deletar/<%= user.id %>" method="post" style="display: inline-block; margin: 0;"
                                   onsubmit="return confirm('Deseja realmente fazer a exclusao?')">
-                                <button type="submit" class="btn btn-danger">
+                                <button type="submit" class="btn btn-action btn-danger">
                                     <i class="fa-solid fa-trash"></i> Excluir
                                 </button>
                             </form>

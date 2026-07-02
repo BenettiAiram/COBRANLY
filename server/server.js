@@ -54,9 +54,13 @@ app.get("/cadastro", (req, res) => {
 
 //importar as rotas do usuario
 const usuariosRoutes = require("./routes/usuarioRoutes.js");
+const cobrancasRoutes = require("./routes/cobrancasRoutes.js");
+const empresasRoutes = require("./routes/empresasRoutes.js");
 
 // Requisições começando com /usuarios e gerenciada pelo sub-arquivo de rotas
 app.use("/usuarios", usuariosRoutes);
+app.use("/cobrancas", cobrancasRoutes);
+app.use("/empresas", empresasRoutes);
 
 
 // Funcao para subir no servidor

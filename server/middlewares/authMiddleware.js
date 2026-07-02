@@ -38,6 +38,15 @@ function somenteAdmin(req, res, next) {
     }
     next()
 }
+
+function somenteCobradorOuAdministrador(req, res, next) {
+    if(req.usuario.perfil !== "administrador" && req.usuario.perfil !== "cobrador"){
+        return res.status(403).render('erro', 
+            { mensagem: "Acesso negado: Somente cobradores e administradores" }
+        )
+    }
+    next()
+}
 // Apenas ofertante
 function somenteOfertante(req, res, next) {
     if(req.usuario.perfil !== "administrador" && req.usuario.perfil !== "ofertante"){
@@ -63,12 +72,13 @@ function usuariosComuns(req,res,next){
             { mensagem: "Acesso negado" }
         )    
     }
-    next()  
-} 
+    next()
+}
 
 module.exports = { 
     verificarAutenticacao, 
     somenteAdmin, 
+    somenteCobradorOuAdministrador,
     somenteInteressado, 
     somenteOfertante, 
     usuariosComuns

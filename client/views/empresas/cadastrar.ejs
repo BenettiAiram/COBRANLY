@@ -19,20 +19,31 @@
                 <div class="row">
                     <div class="col">
                         <fieldset>
-                            <legend class="float-none w-auto"> Informações pessoais </legend>
+                            <legend class="float-none w-auto"> <strong> Informações de login</strong> </legend>
+                            
                         </fieldset>
 
                         <!-- Caixinha de nome -->
                          <div class="form-group">
                             <label for="nome">
-                                <i class="fa-solid fa-id-card"></i> Nome Completo:      
+                                <i class="fa-solid fa-id-card"></i> Nome da empresa:      
                             </label>
                             <input type="text" id="nome" name="nome" class="form-control" required>
                          </div>
-                         <!-- Legenda divisão 2 -->
-                        <fieldset class="mt-3">
-                            <legend class="float-none w-auto"> Informações de login </legend>
-                        </fieldset>
+                        
+                         <!-- Caixinha de nome -->
+                         <div class="form-group">
+                            <label for="nome">
+                                <i class="fa-solid fa-id-card"></i> Nome do encarregado:      
+                            </label>
+                            <input type="text" id="nome" name="nome" class="form-control" required>
+                         </div>
+
+                         <!-- Caixinha de CPF -->
+                        <div class="form-group">
+                            <label for="cpf"> <i class="fa-solid fa-id-card"></i> CPF (opcional)</label>
+                            <input type="text" id="cpf" name="cpf" class="form-control" maxlength="11">
+                        </div>
 
                         <!-- Caixinha de email -->
                         <div class="form-group">
@@ -49,18 +60,6 @@
                                 <option value="cobrador"> Cobrador </option>
                             </select>
                         </div>
-                        <!-- Caixinha de foto -->
-                        <div class="form-group">
-                            <label for="foto"><i class="fa-solid fa-camera"></i> Foto do produto</label>
-                            <input type="file" name="foto" id="foto" class="form-control" accept="image/*" required>
-                        </div>
-                    </div>
-                    <!-- SEGUNDA COLUNA -->
-                    <div class="col">
-                    <!-- Legenda divisão 1 -->
-                        <fieldset>
-                            <legend class="float-none w-auto text-white"> - </legend>
-                        </fieldset>
 
                         <!-- Caixinha de telefone -->
                          <div class="form-group">
@@ -69,8 +68,18 @@
                             </label>
                             <input type="text" id="telefone" name="telefone" class="form-control" required>
                          </div>
-                         <!-- Legenda divisão 2 -->
-                        <fieldset class="mt-3">
+
+                        <!-- Caixinha de foto -->
+                        <div class="form-group">
+                            <label for="foto"><i class="fa-solid fa-camera"></i> Foto da empresa</label>
+                            <input type="file" name="foto" id="foto" class="form-control" accept="image/*" required>
+                        </div>
+                    </div>
+
+                    <!-- SEGUNDA COLUNA -->
+                    <div class="col">
+                    <!-- Legenda divisão 1 -->
+                        <fieldset>
                             <legend class="float-none w-auto text-white"> - </legend>
                         </fieldset>
 
@@ -80,9 +89,41 @@
                             <input type="password" name="senha" id="senha" class="form-control" required>
                          </div>
 
+                         <!-- Caixinha de enderço -->
+                         <div class="form-group">
+                            <label for="endereco">
+                                <i class="fa-solid fa-map-marker-alt"></i> Endereço:      
+                            </label>
+                            <input type="text" id="endereco" name="endereco" class="form-control" required>
+                         </div>
+
+                         <!-- Caixinha de bairro -->
+                         <div class="form-group">
+                            <label for="bairro">
+                                <i class="fa-solid fa-home"></i> Bairro:      
+                            </label>
+                            <input type="text" id="bairro" name="bairro" class="form-control" required>
+                         </div>
+
+                         <!-- Caixinha de cidade -->
+                         <div class="form-group">
+                            <label for="cidade">
+                                <i class="fa-solid fa-city"></i> Cidade:      
+                            </label>
+                            <input type="text" id="cidade" name="cidade" class="form-control" required>
+                         </div>
+
+                         <!-- Caixinha de estado -->
+                         <div class="form-group">
+                            <label for="estado">
+                                <i class="fa-solid fa-flag"></i> Estado:      
+                            </label>
+                            <input type="text" id="estado" name="estado" class="form-control" required>
+                         </div>
+
                          <!-- PREVIEW DA IMAGEM -->
                           <div id="preview-box" class="preview-container max-width:100%" style="height: 230px;">
-                            <img src="..." alt="Foto do usuário" id="preview-img" style="height: 230px; width: auto;">
+                            <img src="..." alt="Foto da empresa" id="preview-img" style="height: 230px; width: auto;">
                           </div>
                     </div>
                 </div>
