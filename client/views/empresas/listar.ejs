@@ -13,7 +13,7 @@
                 <th>Id</th>
                 <th>Nome</th>
                 <th>Responsável</th>
-                <th>Status</th>
+                <th>Email</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -24,12 +24,12 @@
                         <td><%= empresa.id %></td>
                         <td><%= empresa.nome || '-' %></td>
                         <td><%= empresa.responsavel || '-' %></td>
-                        <td><%= empresa.status || '-' %></td>
+                        <td><%= empresa.email || '-' %></td>
                         <td class="acoes-tabela">
-                            <button class="btn btn-secondary" disabled>
+                            <button class="btn btn-secondary">
                                 <i class="fa-solid fa-pen"></i> Editar
                             </button>
-                            <button class="btn btn-danger" disabled>
+                            <button class="btn btn-danger">
                                 <i class="fa-solid fa-trash"></i> Excluir
                             </button>
                         </td>

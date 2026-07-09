@@ -1,16 +1,15 @@
 const express = require("express")
 const router = express.Router()
 
-const { verificarAutenticacao } = require("../middlewares/authMiddleware.js")
+const empresaController = require("../controllers/empresaController.js")
+const { verificarAutenticacao, somenteAdmin } = require("../middlewares/authMiddleware.js")
 
 router.use(verificarAutenticacao)
 
-router.get("/listar", (req, res) => {
-  res.render("empresas/listar", { empresas: [] })
-})
+router.get("/listar", empresaController.listar)
+router.get("/cadastro", empresaController.renderizarCadastro)
+router.post("/cadastrar", empresaController.cadastrar)
 
-router.get("/cadastro", (req, res) => {
-  res.render("empresas/cadastrar")
-})
+router.use(somenteAdmin)
 
 module.exports = router
