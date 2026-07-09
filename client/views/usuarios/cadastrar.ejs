@@ -45,9 +45,14 @@
                             <label for="perfil"> <i class="fa-solid fa-users"></i> Papel do usuário:</label>
                             <select name="perfil" id="perfil" class="form-control" required>
                                 <option value="none"> Selecione </option>
-                                <option value="administrador"> Administrador </option>
-                                <option value="cobrador"> Cobrador </option>
-                                <option value="devedor"> Devedor </option>
+                                <% const perfilAtual = (typeof usuario !== 'undefined' && usuario) ? usuario.perfil : null %>
+                                <% if (perfilAtual === 'cobrador') { %>
+                                    <option value="devedor"> Devedor </option>
+                                <% } else { %>
+                                    <option value="administrador"> Administrador </option>
+                                    <option value="cobrador"> Cobrador </option>
+                                    <option value="devedor"> Devedor </option>
+                                <% } %>
                             </select>
                         </div>
                     </div>

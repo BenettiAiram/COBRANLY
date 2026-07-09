@@ -21,8 +21,8 @@ router.get("/logout", usuarioController.logout)
 router.get("/recuperar_senha", usuarioController.RecuperarSenha)
 router.post("/recuperar_senha", usuarioController.enviarRecuperacaoSenha)
 
-// Rota de cadastro de usuário
-// O multer, salva a imagem primeiro, através do upload.single, depois chama o controller
+// ROTAS PÚBLICAS PARA CADASTRO
+router.get("/cadastro", usuarioController.renderizarCadastro);
 router.post('/cadastrar', upload.single('foto'), usuarioController.cadastrar )
 
 // ROTAS PRIVADAS
@@ -31,24 +31,18 @@ router.use(verificarAutenticacao)
 
 router.get("/listarDevedores", usuarioController.listarDevedores);
 
-router.use(somenteAdmin)
-
 // CRUD
 // READ - LISTAR USUÁRIOS
 // Obtém a lista de usuários
-router.get("/listar", usuarioController.listar);
-
-// CREATE - CRIAR USUÁRIOS
-//Retornar a página de cadastro
-router.get("/cadastro", usuarioController.renderizarCadastro);
+router.get("/listar", somenteAdmin, usuarioController.listar);
 
 // DELETE - DELETAR UM USUÁRIO
-router.post("/deletar/:id", usuarioController.deletar)
+router.post("/deletar/:id", somenteAdmin, usuarioController.deletar)
 
 // UPDATE - LISTA UM USUÁRIO
-router.get("/editar/:id", usuarioController.editar)
+router.get("/editar/:id", somenteAdmin, usuarioController.editar)
 
 // UPDATE - ATUALIZA AS INFORMAÇOES DE UM USUÁRIO
-router.post("/atualizar/:id", upload.single('foto'), usuarioController.atualizarUsuario)
+router.post("/atualizar/:id", somenteAdmin, upload.single('foto'), usuarioController.atualizarUsuario)
 
 module.exports = router

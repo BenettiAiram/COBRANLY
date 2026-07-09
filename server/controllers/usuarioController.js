@@ -62,14 +62,28 @@ module.exports = {
         try {
             const { nome, email, senha, telefone, perfil } = req.body
             const perfisPermitidos = ["administrador", "cobrador", "devedor"]
-            const usuarioLogado = obterUsuarioLogado(req)
+            const usuarioLogado = req.usuario || obterUsuarioLogado(req)
 
             if (!perfisPermitidos.includes(perfil)) {
                 return res.status(400).render("erro", { mensagem: "Perfil invalido" })
             }
 
-            if (perfil === "administrador" && usuarioLogado?.perfil !== "administrador") {
-                return res.status(403).render("erro", { mensagem: "Voce nao possui acesso" })
+            if (usuarioLogado) {
+                if (usuarioLogado.perfil === "devedor") {
+                    return res.status(403).render("erro", { mensagem: "Você não possui acesso para cadastrar usuários" })
+                }
+
+                if (usuarioLogado.perfil === "cobrador" && perfil !== "devedor") {
+                    return res.status(403).render("erro", { mensagem: "Cobradores só podem cadastrar devedores" })
+                }
+
+                if (perfil === "administrador" && usuarioLogado.perfil !== "administrador") {
+                    return res.status(403).render("erro", { mensagem: "Voce nao possui acesso" })
+                }
+
+                if (perfil === "cobrador" && usuarioLogado.perfil !== "administrador") {
+                    return res.status(403).render("erro", { mensagem: "Voce nao possui acesso" })
+                }
             }
 
             const fotoDaPessoa = req.file ? `/uploads/usuarios/${req.file.filename}` : null
@@ -77,15 +91,19 @@ module.exports = {
 
             await usuarioModel.criarUsuario(nome, email, senhaHash, telefone, fotoDaPessoa, perfil)
 
-            let redirecionadoPara = "/login"
+            if (usuarioLogado) {
+                let redirecionadoPara = "/login"
 
-            if (usuarioLogado?.perfil === "administrador") {
-                redirecionadoPara = "/usuarios/listar"
-            } else if (usuarioLogado?.perfil === "cobrador" || usuarioLogado?.perfil === "devedor") {
-                redirecionadoPara = "/usuarios/listarDevedores"
+                if (usuarioLogado.perfil === "administrador") {
+                    redirecionadoPara = "/usuarios/listar"
+                } else if (usuarioLogado.perfil === "cobrador" || usuarioLogado.perfil === "devedor") {
+                    redirecionadoPara = "/usuarios/listarDevedores"
+                }
+
+                return res.redirect(redirecionadoPara)
             }
 
-            res.redirect(redirecionadoPara)
+            res.redirect("/login")
         } catch (erro) {
             console.error(erro)
             res.status(500).render("erro", { mensagem: "Erro ao cadastrar usuario" })
