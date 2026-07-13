@@ -1,14 +1,18 @@
-- Clona o projeto 
-- Crie o banco com o script da pasta data
-- Abra o terminal, entre na pasta server
-- 'npm i' para instalar os pacotes necessários
-- crie o arquivo .env com os seguintes dados
+🎯 Objetivo--
 
-PORT = 3000
+O principal objetivo do projeto é facilitar o gerenciamento de clientes inadimplentes, permitindo o controle das cobranças, o acompanhamento de pagamentos e a organização de todas as informações relacionadas ao processo de recuperação de créditos.
 
-DB_HOST = localhost
-DB_USER = root
-DB_PASSWORD = usbw
-DB_NAME = sistema_trocas 
+🚀 Funcionalidades--
 
-JWT_SECRET = 'cr7'
+Cadastro de clientes;
+Registro e gerenciamento de cobranças;
+Controle de dívidas em aberto;
+Acompanhamento de pagamentos;
+Histórico das interações realizadas durante o processo de cobrança;
+Sistema em nuvem com acesso via navegador.
+
+💡 Problema Resolvido--
+
+Muitas empresas ainda utilizam sistemas desktop para controlar cobranças, o que dificulta o acesso às informações e o acompanhamento dos processos. Além disso, a falta de organização pode impactar negativamente a eficiência do setor de cobrança.
+
+O Cobranly foi desenvolvido para centralizar essas informações em uma plataforma web moderna, proporcionando maior controle, acessibilidade e organização.
